@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /tickets/api/
+
+# Deploy this file at the web root (https://koa-hub.com/robots.txt).
+# If the tickets page keeps its own copy, also publish it at
+# https://koa-hub.com/tickets/robots.txt for completeness.
+Sitemap: https://koa-hub.com/tickets/sitemap.xml

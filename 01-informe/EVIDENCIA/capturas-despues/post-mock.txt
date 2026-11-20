@@ -1,0 +1,73 @@
+------WebKitFormBoundaryuMhGxhA9yzkLklbS
+Content-Disposition: form-data; name="firstName"
+
+Lucia
+------WebKitFormBoundaryuMhGxhA9yzkLklbS
+Content-Disposition: form-data; name="lastName"
+
+Fernandez
+------WebKitFormBoundaryuMhGxhA9yzkLklbS
+Content-Disposition: form-data; name="email"
+
+lucia@example.com
+------WebKitFormBoundaryuMhGxhA9yzkLklbS
+Content-Disposition: form-data; name="phone_national"
+
+55 1234 5678
+------WebKitFormBoundaryuMhGxhA9yzkLklbS
+Content-Disposition: form-data; name="phone"
+
++525512345678
+------WebKitFormBoundaryuMhGxhA9yzkLklbS
+Content-Disposition: form-data; name="country_code"
+
+MX
+------WebKitFormBoundaryuMhGxhA9yzkLklbS
+Content-Disposition: form-data; name="country"
+
+Mexico
+------WebKitFormBoundaryuMhGxhA9yzkLklbS
+Content-Disposition: form-data; name="quantity"
+
+1
+------WebKitFormBoundaryuMhGxhA9yzkLklbS
+Content-Disposition: form-data; name="players[0][name]"
+
+Lucia Fernandez
+------WebKitFormBoundaryuMhGxhA9yzkLklbS
+Content-Disposition: form-data; name="players[0][age]"
+
+27
+------WebKitFormBoundaryuMhGxhA9yzkLklbS
+Content-Disposition: form-data; name="players[0][position]"
+
+Center
+------WebKitFormBoundaryuMhGxhA9yzkLklbS
+Content-Disposition: form-data; name="players[0][jerseySize]"
+
+M
+------WebKitFormBoundaryuMhGxhA9yzkLklbS
+Content-Disposition: form-data; name="ticketType"
+
+Player Ticket
+------WebKitFormBoundaryuMhGxhA9yzkLklbS
+Content-Disposition: form-data; name="landing_page"
+
+http://127.0.0.1:8099/index.html
+------WebKitFormBoundaryuMhGxhA9yzkLklbS
+Content-Disposition: form-data; name="first_seen"
+
+2026-10-28T23:19:01.125Z
+------WebKitFormBoundaryuMhGxhA9yzkLklbS
+Content-Disposition: form-data; name="last_seen"
+
+2026-10-28T23:19:10.441Z
+------WebKitFormBoundaryuMhGxhA9yzkLklbS
+Content-Disposition: form-data; name="company"
+
+
+------WebKitFormBoundaryuMhGxhA9yzkLklbS
+Content-Disposition: form-data; name="terms"
+
+accepted
+------WebKitFormBoundaryuMhGxhA9yzkLklbS--

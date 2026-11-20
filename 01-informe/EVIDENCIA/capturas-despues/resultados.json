@@ -1,0 +1,177 @@
+[
+  {
+    "name": "sin scroll horizontal index @1440",
+    "ok": true,
+    "detail": "scrollWidth=1440 clientWidth=1440 overflow=[\"marquee__track\",\"SPAN\",\"SPAN\",\"SPAN\",\"SPAN\",\"SPAN\",\"SPAN\",\"SPAN\"]"
+  },
+  {
+    "name": "sin errores de consola index @1440",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "sin scroll horizontal tickets @1440",
+    "ok": true,
+    "detail": "scrollWidth=1440 clientWidth=1440 overflow=[\"tm-hp\",\"LABEL\",\"INPUT\"]"
+  },
+  {
+    "name": "sin errores de consola tickets @1440",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "sin scroll horizontal index @1024",
+    "ok": true,
+    "detail": "scrollWidth=1024 clientWidth=1024 overflow=[\"marquee__track\",\"SPAN\",\"SPAN\",\"SPAN\",\"SPAN\",\"SPAN\",\"SPAN\",\"SPAN\"]"
+  },
+  {
+    "name": "sin errores de consola index @1024",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "sin scroll horizontal tickets @1024",
+    "ok": true,
+    "detail": "scrollWidth=1024 clientWidth=1024 overflow=[\"tm-hp\",\"LABEL\",\"INPUT\"]"
+  },
+  {
+    "name": "sin errores de consola tickets @1024",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "sin scroll horizontal index @768",
+    "ok": true,
+    "detail": "scrollWidth=768 clientWidth=768 overflow=[\"marquee__track\",\"SPAN\",\"SPAN\",\"SPAN\",\"SPAN\",\"SPAN\",\"SPAN\",\"SPAN\"]"
+  },
+  {
+    "name": "sin errores de consola index @768",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "sin scroll horizontal tickets @768",
+    "ok": true,
+    "detail": "scrollWidth=768 clientWidth=768 overflow=[\"tm-hp\",\"LABEL\",\"INPUT\"]"
+  },
+  {
+    "name": "sin errores de consola tickets @768",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "sin scroll horizontal index @390",
+    "ok": true,
+    "detail": "scrollWidth=390 clientWidth=390 overflow=[\"marquee__track\",\"SPAN\",\"SPAN\",\"SPAN\",\"SPAN\",\"SPAN\",\"SPAN\",\"SPAN\"]"
+  },
+  {
+    "name": "sin errores de consola index @390",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "sin scroll horizontal tickets @390",
+    "ok": true,
+    "detail": "scrollWidth=390 clientWidth=390 overflow=[\"tm-hp\",\"LABEL\",\"INPUT\"]"
+  },
+  {
+    "name": "sin errores de consola tickets @390",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "sin scroll horizontal index @360",
+    "ok": true,
+    "detail": "scrollWidth=360 clientWidth=360 overflow=[\"marquee__track\",\"SPAN\",\"SPAN\",\"SPAN\",\"SPAN\",\"SPAN\",\"SPAN\",\"SPAN\"]"
+  },
+  {
+    "name": "sin errores de consola index @360",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "sin scroll horizontal tickets @360",
+    "ok": true,
+    "detail": "scrollWidth=360 clientWidth=360 overflow=[\"tm-hp\",\"LABEL\",\"INPUT\"]"
+  },
+  {
+    "name": "sin errores de consola tickets @360",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "todas las imágenes del landing cargan",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "hero visible sin esperar animación",
+    "ok": true,
+    "detail": "opacity=1"
+  },
+  {
+    "name": "CTAs enlazan a tickets.html y no queda modal",
+    "ok": true,
+    "detail": "{\"links\":5,\"modal\":false,\"oldTriggers\":0}"
+  },
+  {
+    "name": "cursor nativo sobre secciones blancas",
+    "ok": true,
+    "detail": "{\"body\":\"auto\",\"card\":\"auto\",\"faq\":\"auto\",\"link\":\"pointer\",\"button\":\"pointer\"}"
+  },
+  {
+    "name": "FAQ sincroniza aria-expanded e inert",
+    "ok": true,
+    "detail": "{\"faqBefore\":{\"firstExpanded\":\"true\",\"secondInert\":true},\"faqAfter\":{\"secondExpanded\":\"true\",\"secondInert\":false}}"
+  },
+  {
+    "name": "el CTA navega a la página de tickets",
+    "ok": true,
+    "detail": "http://127.0.0.1:8099/tickets.html"
+  },
+  {
+    "name": "página de tickets independiente con formulario",
+    "ok": true,
+    "detail": "{\"heading\":\"Your spot on the ice starts here.\",\"form\":true,\"modal\":false,\"price\":\"$175\"}"
+  },
+  {
+    "name": "todas las imágenes de tickets cargan",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "cantidad 1000 se limita a 10",
+    "ok": true,
+    "detail": "{\"value\":\"10\",\"players\":10}"
+  },
+  {
+    "name": "stepper resta y sincroniza jugadores",
+    "ok": true,
+    "detail": "{\"value\":\"9\",\"players\":9}"
+  },
+  {
+    "name": "validación inline bloquea envío vacío",
+    "ok": true,
+    "detail": "{\"firstNameInvalid\":\"true\",\"firstNameError\":false,\"errorVisible\":true,\"focus\":\"tmFirstName\"}"
+  },
+  {
+    "name": "nombre con números se rechaza",
+    "ok": true,
+    "detail": "{\"invalid\":\"true\",\"msg\":\"The first name can only contain letters, spaces, apostrophes and hyphens.\"}"
+  },
+  {
+    "name": "edad 1 se rechaza",
+    "ok": true,
+    "detail": "aria-invalid=true"
+  },
+  {
+    "name": "borrador se restaura tras recargar",
+    "ok": true,
+    "detail": "{\"first\":\"Lucia\",\"last\":\"Fernandez\",\"notice\":true}"
+  },
+  {
+    "name": "POST incluye quantity y jugadores",
+    "ok": true,
+    "detail": "------WebKitFormBoundaryuMhGxhA9yzkLklbS Content-Disposition: form-data; name=\"firstName\"  Lucia ------WebKitFormBoundaryuMhGxhA9yzkLklbS Content-Disposition: form-data; name=\"lastName\"  Fernandez ------WebKitFormBoundaryuMhGxhA9yzkLklbS Content-Disposition: form-data; name=\"email\"  lucia"
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "name": "koa-xhock-qa-tools",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Servidor local, pruebas Playwright y capturas para el QA de XHOCK",
+  "type": "commonjs",
+  "scripts": {
+    "serve": "node serve.js",
+    "test": "node test-site.js",
+    "shots": "node shots.js",
+    "lh:compare": "node lh-compare.js"
+  },
+  "dependencies": {
+    "playwright-core": "^1.64.1"
+  }
+}
