@@ -1,14 +1,15 @@
+---
+permalink: privacy.html
+---
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Privacy Policy — XHOCK by KOA</title>
-  <meta name="description" content="How KOA collects, uses and protects the personal data submitted through the XHOCK ticket registration form." />
-  <link rel="icon" type="image/png" href="assets/favicon.png" />
-  <link rel="canonical" href="https://koa-hub.com/tickets/privacy.html" />
-  <meta name="robots" content="index,follow" />
-  <meta name="theme-color" content="#050505" />
+{%- set pageTitle = "Privacy Policy — XHOCK by KOA" -%}
+{%- set pageDescription = "How KOA collects, uses and protects the personal data submitted through the XHOCK ticket registration form." -%}
+{%- set pagePath = "privacy.html" -%}
+{% include "seo.njk" %}
   <link rel="preload" href="assets/fonts/Orbitron-variable-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="assets/fonts/Manrope-variable-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="assets/css/styles.css" />
@@ -126,7 +127,7 @@
       certain processing, withdraw consent for analytics, and ask for a copy of the data you provided.
     </p>
     <p>
-      To exercise these rights, <a href="https://wa.me/525579387088?text=Hi%20KOA%2C%20I%20have%20a%20data%20privacy%20request%20about%20XHOCK" target="_blank" rel="noreferrer">message KOA on WhatsApp</a>
+      To exercise these rights, <a href="https://wa.me/{{ site.whatsappNumber }}?text=Hi%20KOA%2C%20I%20have%20a%20data%20privacy%20request%20about%20XHOCK" target="_blank" rel="noreferrer">message KOA on WhatsApp</a>
       and state clearly which right you want to exercise. <strong>[KOA to confirm the formal privacy inbox
       and the response deadline.]</strong>
     </p>
@@ -151,7 +152,7 @@
       latest version. Material changes will be communicated on this page.
     </p>
     <p>
-      Privacy contact: <a href="https://wa.me/525579387088?text=Hi%20KOA%2C%20I%20have%20a%20data%20privacy%20question%20about%20XHOCK" target="_blank" rel="noreferrer">KOA on WhatsApp</a>.
+      Privacy contact: <a href="https://wa.me/{{ site.whatsappNumber }}?text=Hi%20KOA%2C%20I%20have%20a%20data%20privacy%20question%20about%20XHOCK" target="_blank" rel="noreferrer">KOA on WhatsApp</a>.
       Formal address: <strong>[KOA to confirm]</strong>.
     </p>
   </main>

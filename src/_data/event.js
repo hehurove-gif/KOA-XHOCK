@@ -24,7 +24,9 @@ const dateFromTo = sameDay ? long(start) : sameMonth ? `${long(start)} to ${end.
 const dateThrough = sameDay ? long(start) : sameMonth ? `${long(start)} through ${end.day}` : `${long(start)} through ${long(end)}`;
 const days = Math.round((Date.UTC(end.year, end.month, end.day) - Date.UTC(start.year, start.month, start.day)) / 86400000) + 1;
 
-const status = ['open', 'soon', 'closed'].includes(raw.status) ? raw.status : 'closed';
+// XHOCK_STATUS=open npm run build permite previsualizar/probar otro estado sin tocar el JSON.
+const requested = process.env.XHOCK_STATUS || raw.status;
+const status = ['open', 'soon', 'closed'].includes(requested) ? requested : 'closed';
 
 export default {
   ...raw,

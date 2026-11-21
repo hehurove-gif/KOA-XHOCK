@@ -1,4 +1,7 @@
-# Checklist de despliegue — KOA XHOCK /tickets/
+# Checklist de despliegue — KOA XHOCK /tickets/ (nginx · plan anterior)
+
+> **Reemplazado:** el sitio se publica ahora en Cloudflare Pages. Ver `CLOUDFLARE_PAGES_Y_CMS.md`.
+> Este documento se conserva solo como referencia (rutas de archivos anteriores a la migración a `src/`).
 
 Este documento asume que se publican **solo los archivos del sitio** que están
 en la raíz del paquete (`index.html`, `tickets.html`, páginas legales,

@@ -11,8 +11,11 @@
 (function () {
   'use strict';
 
-  var GTM_ID = 'GTM-PPGNTDHR';
-  var META_PIXEL_ID = '1026403033730229';
+  // Los IDs vienen del HTML (src/_data/cms/site.json) para que no haya que tocar código.
+  var tag = document.currentScript || {};
+  var data = tag.dataset || {};
+  var GTM_ID = data.gtm || '';
+  var META_PIXEL_ID = data.pixel || '';
   var loaded = false;
 
   function loadMetaPixel() {
@@ -44,8 +47,8 @@
   function load() {
     if (loaded) return;
     loaded = true;
-    loadGtm();
-    loadMetaPixel();
+    if (GTM_ID) loadGtm();
+    if (META_PIXEL_ID) loadMetaPixel();
     events.forEach(function (name) {
       window.removeEventListener(name, load);
     });

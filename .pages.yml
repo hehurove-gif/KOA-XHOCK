@@ -1,0 +1,366 @@
+# Configuración de Pages CMS (https://pagescms.org/docs/configuration/)
+# Todo lo que se edita aquí vive en src/_data/cms/*.json y se publica con un commit al repo.
+# Cada commit dispara el build en Cloudflare Pages (npm run build -> _site).
+media:
+  input: src/assets/img
+  output: assets/img
+content:
+- name: event
+  label: Evento (fechas, sede, precio y venta)
+  type: file
+  path: src/_data/cms/event.json
+  format: json
+  fields:
+  - name: status
+    label: Estado de la venta
+    type: select
+    required: true
+    description: Abierta = se muestran botones de compra y el formulario. Próximamente / Cerrada = se ocultan y aparece el
+      aviso de abajo.
+    options:
+      values:
+      - name: open
+        label: Abierta (se pueden comprar boletos)
+      - name: soon
+        label: Próximamente
+      - name: closed
+        label: Cerrada (el evento ya pasó)
+  - name: name
+    label: Nombre corto del evento
+    type: string
+  - name: tournamentName
+    label: Nombre completo del torneo
+    type: string
+  - name: startDate
+    label: Primer día del evento
+    type: date
+    required: true
+    options:
+      format: yyyy-MM-dd
+  - name: endDate
+    label: Último día del evento
+    type: date
+    required: true
+    options:
+      format: yyyy-MM-dd
+  - name: venue
+    label: Sede
+    type: string
+  - name: city
+    label: Ciudad
+    type: string
+  - name: region
+    label: Estado / región
+    type: string
+  - name: country
+    label: País (código de 2 letras, por ejemplo MX)
+    type: string
+  - name: price
+    label: Precio por boleto (solo se muestra en el sitio)
+    type: number
+    description: 'OJO: el cobro real lo define Stripe. Si cambias este número, cambia también el precio en Stripe.'
+  - name: currency
+    label: Moneda
+    type: select
+    options:
+      values:
+      - name: USD
+        label: USD
+      - name: MXN
+        label: MXN
+      - name: CAD
+        label: CAD
+  - name: closedTitle
+    label: Aviso cuando la venta está CERRADA — título
+    type: string
+  - name: closedText
+    label: Aviso cuando la venta está CERRADA — texto
+    type: text
+  - name: soonTitle
+    label: Aviso PRÓXIMAMENTE — título
+    type: string
+  - name: soonText
+    label: Aviso PRÓXIMAMENTE — texto
+    type: text
+  - name: noticeButtonLabel
+    label: Texto del botón del aviso
+    type: string
+  - name: noticeButtonUrl
+    label: Enlace del botón del aviso (WhatsApp, Instagram, etc.)
+    type: string
+- name: home
+  label: Página principal (textos)
+  type: file
+  path: src/_data/cms/home.json
+  format: json
+  fields:
+  - name: seoTitle
+    label: Título en Google y en la pestaña
+    type: string
+  - name: seoDescription
+    label: Descripción en Google
+    type: text
+    description: 'Atajos: en cualquier texto del sitio puedes escribir {dates}, {datesShort}, {datesFromTo}, {datesThrough},
+      {venue}, {price}, {currency} y {year}; se reemplazan solos con los datos del evento. Donde se indica, **texto** entre
+      dobles asteriscos sale en negritas.'
+  - name: shareDescription
+    label: Texto al compartir en WhatsApp / redes
+    type: text
+  - name: hero
+    label: Portada
+    type: object
+    fields:
+    - name: titleLines
+      label: Título (una línea por renglón)
+      type: object
+      list: true
+      fields:
+      - name: text
+        label: Texto
+        type: string
+      - name: accent
+        label: Resaltar en amarillo
+        type: boolean
+    - name: intro
+      label: Párrafo de introducción (empieza después de "From {fechas},")
+      type: text
+    - name: solo
+      label: Frase destacada
+      type: string
+    - name: proof
+      label: Datos bajo los botones
+      type: string
+      list: true
+  - name: marquee
+    label: Cintas de texto en movimiento
+    type: object
+    fields:
+    - name: top
+      label: Cinta superior
+      type: string
+      list: true
+    - name: bottom
+      label: Cinta inferior
+      type: string
+      list: true
+  - name: stats
+    label: Sección "XHOCK at a glance"
+    type: object
+    fields:
+    - name: eyebrow
+      label: Etiqueta
+      type: string
+    - name: titleLines
+      label: Título
+      type: object
+      list: true
+      fields:
+      - name: text
+        label: Texto
+        type: string
+      - name: accent
+        label: Resaltar en amarillo
+        type: boolean
+    - name: priceBlurb
+      label: Texto de la tarjeta de precio
+      type: text
+  - name: tickets
+    label: Sección de boletos (solo visible con venta abierta)
+    type: object
+    fields:
+    - name: eyebrow
+      label: Etiqueta
+      type: string
+    - name: titleLines
+      label: Título
+      type: object
+      list: true
+      fields:
+      - name: text
+        label: Texto
+        type: string
+      - name: accent
+        label: Resaltar en amarillo
+        type: boolean
+    - name: cardLabel
+      label: Nombre del boleto
+      type: string
+    - name: cardText
+      label: Descripción
+      type: text
+    - name: bullets
+      label: Lista de lo que incluye
+      type: string
+      list: true
+    - name: buttonLabel
+      label: Texto del botón
+      type: string
+  - name: context
+    label: Sección "Experience XHOCK"
+    type: object
+    fields:
+    - name: eyebrow
+      label: Etiqueta
+      type: string
+    - name: titleLines
+      label: Título
+      type: object
+      list: true
+      fields:
+      - name: text
+        label: Texto
+        type: string
+      - name: accent
+        label: Resaltar en amarillo
+        type: boolean
+    - name: quote
+      label: Cita sobre la foto
+      type: text
+    - name: text
+      label: Texto principal (usa **negritas** para resaltar)
+      type: text
+    - name: points
+      label: Tres puntos con icono (usa **negritas**)
+      type: text
+      list:
+        max: 3
+    - name: link
+      label: Texto del enlace
+      type: string
+  - name: value
+    label: Sección "More than a tournament"
+    type: object
+    fields:
+    - name: eyebrow
+      label: Etiqueta
+      type: string
+    - name: titleLines
+      label: Título
+      type: object
+      list: true
+      fields:
+      - name: text
+        label: Texto
+        type: string
+      - name: accent
+        label: Resaltar en amarillo
+        type: boolean
+    - name: text
+      label: Texto principal
+      type: text
+    - name: steps
+      label: Tarjetas (máximo 5, cada una con su icono)
+      type: object
+      list:
+        max: 5
+        collapsible:
+          collapsed: true
+          summary: '{title}'
+      fields:
+      - name: title
+        label: Título
+        type: string
+      - name: text
+        label: Texto
+        type: text
+    - name: overlayText
+      label: Texto sobre la foto
+      type: string
+  - name: travel
+    label: Sección de viaje y hoteles
+    type: object
+    fields:
+    - name: eyebrow
+      label: Etiqueta
+      type: string
+    - name: titleLines
+      label: Título
+      type: object
+      list: true
+      fields:
+      - name: text
+        label: Texto
+        type: string
+      - name: accent
+        label: Resaltar en amarillo
+        type: boolean
+    - name: text
+      label: Texto
+      type: text
+    - name: buttonLabel
+      label: Texto del botón
+      type: string
+  - name: finalCta
+    label: Llamado final
+    type: object
+    fields:
+    - name: eyebrow
+      label: Etiqueta
+      type: string
+    - name: titleLines
+      label: Título
+      type: object
+      list: true
+      fields:
+      - name: text
+        label: Texto
+        type: string
+      - name: accent
+        label: Resaltar en amarillo
+        type: boolean
+    - name: text
+      label: Texto
+      type: text
+    - name: buttonLabel
+      label: Texto del botón
+      type: string
+- name: faq
+  label: Preguntas frecuentes
+  type: file
+  path: src/_data/cms/faq.json
+  format: json
+  fields:
+  - name: intro
+    label: Texto de introducción
+    type: text
+  - name: items
+    label: Preguntas
+    type: object
+    list:
+      collapsible:
+        collapsed: true
+        summary: '{question}'
+    fields:
+    - name: question
+      label: Pregunta
+      type: string
+    - name: answer
+      label: Respuesta
+      type: text
+- name: site
+  label: Ajustes del sitio (contacto, redes, pie de página)
+  type: file
+  path: src/_data/cms/site.json
+  format: json
+  fields:
+  - name: whatsappNumber
+    label: WhatsApp (solo números, con código de país, por ejemplo 5255...)
+    type: string
+  - name: instagramUrl
+    label: Instagram
+    type: string
+  - name: mapsUrl
+    label: Enlace de Google Maps
+    type: string
+  - name: footerAbout
+    label: Pie de página — quiénes somos
+    type: text
+  - name: footerLegal
+    label: Pie de página — aviso legal
+    type: text
+  - name: gtmId
+    label: Google Tag Manager (ID)
+    type: string
+  - name: metaPixelId
+    label: Meta Pixel (ID)
+    type: string

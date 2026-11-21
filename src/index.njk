@@ -203,10 +203,19 @@ permalink: index.html
       <canvas class="particle-canvas particle-canvas--form" data-particles="form" aria-hidden="true"></canvas>
       <div class="container">
         <div class="section-head section-head--center">
+          {%- if event.isOpen %}
           <p class="eyebrow fade-up">{{ cms.home.tickets.eyebrow | fill }}</p>
           <h2 class="split-title">
             {{ titleLines(cms.home.tickets.titleLines) }}
           </h2>
+          {%- else %}
+          <p class="eyebrow fade-up">{{ event.name }}</p>
+          <h2 class="split-title">
+            <span class="line-wrap"><span class="line line--accent">{{ event.noticeTitle | fill }}</span></span>
+          </h2>
+          <p class="section-text fade-up delay-1" style="max-width:640px;margin-inline:auto;text-align:center">{{ event.noticeText | fill }}</p>
+          <p class="fade-up delay-2" style="text-align:center">{{ buyButton("", event, "") }}</p>
+          {%- endif %}
         </div>
         <div class="tickets-grid">
           {% if event.isOpen %}
@@ -220,13 +229,6 @@ permalink: index.html
               {%- endfor %}
             </ul>
             {{ buyButton(cms.home.tickets.buttonLabel, event, "") }}
-          </div>
-          {% else %}
-          <div class="price-card reveal">
-            <span class="price-card__label">{{ event.name }}</span>
-            <strong>{{ event.noticeTitle | fill }}</strong>
-            <p>{{ event.noticeText | fill }}</p>
-            {{ buyButton("", event, "") }}
           </div>
           {% endif %}
         </div>

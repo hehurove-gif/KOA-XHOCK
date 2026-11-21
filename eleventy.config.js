@@ -21,9 +21,15 @@ function fill(value) {
 export default function (eleventyConfig) {
   // Copia tal cual: CSS, JS, imágenes, fuentes, robots y cabeceras de Cloudflare.
   eleventyConfig.addPassthroughCopy('src/assets');
+  // Widget de teléfono autoalojado (sin CDN): solo los archivos que se usan.
+  eleventyConfig.addPassthroughCopy({
+    'node_modules/intl-tel-input/build/css/intlTelInput.min.css': 'assets/vendor/intl-tel-input/css/intlTelInput.min.css',
+    'node_modules/intl-tel-input/build/js/intlTelInput.min.js': 'assets/vendor/intl-tel-input/js/intlTelInput.min.js',
+    'node_modules/intl-tel-input/build/js/utils.js': 'assets/vendor/intl-tel-input/js/utils.js',
+    'node_modules/intl-tel-input/build/img': 'assets/vendor/intl-tel-input/img'
+  });
   eleventyConfig.addPassthroughCopy('src/robots.txt');
   eleventyConfig.addPassthroughCopy('src/_headers');
-  eleventyConfig.addPassthroughCopy('src/_redirects');
 
   // {tokens} → valores del evento. Nunjucks escapa el resultado (autoescape).
   eleventyConfig.addFilter('fill', value => fill(value));
@@ -35,6 +41,7 @@ export default function (eleventyConfig) {
   eleventyConfig.addFilter('plain', value => fill(value).replace(/\*\*/g, ''));
   eleventyConfig.addFilter('json', value => JSON.stringify(value));
   eleventyConfig.addFilter('absUrl', path => new URL(path, site.url).href);
+  eleventyConfig.addFilter('dateISO', d => new Date(d).toISOString().slice(0, 10));
   eleventyConfig.addFilter('pad2', n => String(n).padStart(2, '0'));
 
   // JSON-LD del evento. Solo anuncia la oferta de boletos cuando la venta está abierta.

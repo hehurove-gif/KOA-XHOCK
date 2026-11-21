@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const zlib = require('zlib');
 
-const ROOT = path.resolve(__dirname, '..');
+const ROOT = path.resolve(__dirname, '..', '_site');
 const PORT = Number(process.env.PORT || 8100);
 
 const TYPES = {

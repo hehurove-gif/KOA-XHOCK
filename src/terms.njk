@@ -1,14 +1,15 @@
+---
+permalink: terms.html
+---
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Terms &amp; Conditions — XHOCK by KOA</title>
-  <meta name="description" content="Terms and conditions for XHOCK by KOA, the international hockey tournament at Happi Arena Cancun, October 29 – November 1." />
-  <link rel="icon" type="image/png" href="assets/favicon.png" />
-  <link rel="canonical" href="https://koa-hub.com/tickets/terms.html" />
-  <meta name="robots" content="index,follow" />
-  <meta name="theme-color" content="#050505" />
+{%- set pageTitle = "Terms & Conditions — XHOCK by KOA" -%}
+{%- set pageDescription = "Terms and conditions for XHOCK by KOA, the international hockey tournament at {venue}, {dates}." -%}
+{%- set pagePath = "terms.html" -%}
+{% include "seo.njk" %}
   <link rel="preload" href="assets/fonts/Orbitron-variable-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="assets/fonts/Manrope-variable-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="assets/css/styles.css" />
@@ -28,7 +29,7 @@
 
   <main class="legal-main container" id="legal-content" tabindex="-1">
     <h1>Terms &amp; Conditions</h1>
-    <p class="legal-meta">XHOCK by KOA · Happi Arena Cancun · October 29 – November 1 · Last updated: October 24, 2026</p>
+    <p class="legal-meta">XHOCK by KOA · {{ event.venue }} · {{ event.dateLabel }} · Last updated: October 24, 2026</p>
 
     <div class="legal-callout">
       <strong>Draft for KOA legal review.</strong> This document describes how the ticket flow actually works,
@@ -64,7 +65,7 @@
 
     <h2 id="tickets">2. Tickets and what they include</h2>
     <p>
-      The product sold on this page is a <strong>Player Ticket</strong> priced at <strong>175 USD</strong> per
+      The product sold on this page is a <strong>Player Ticket</strong> priced at <strong>{{ event.price }} {{ event.currency }}</strong> per
       player. A Player Ticket includes:
     </p>
     <ul>
@@ -180,7 +181,7 @@
     <h2 id="contact">11. Contact</h2>
     <p>
       Questions about these terms, a purchase or a refund request:
-      <a href="https://wa.me/525579387088?text=Hi%20KOA%2C%20I%20have%20a%20question%20about%20the%20XHOCK%20terms" target="_blank" rel="noreferrer">message KOA on WhatsApp</a>.
+      <a href="https://wa.me/{{ site.whatsappNumber }}?text=Hi%20KOA%2C%20I%20have%20a%20question%20about%20the%20XHOCK%20terms" target="_blank" rel="noreferrer">message KOA on WhatsApp</a>.
     </p>
     <p>
       Postal address and formal notice address: <strong>[KOA to confirm]</strong>.

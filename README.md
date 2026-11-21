@@ -9,50 +9,22 @@ despliegue.
 ## Contenido
 
 ```
-KOA-QA-2026-10/
-├── index.html                      Página principal del sitio
-├── tickets.html                    Compra de boletos (página independiente)
-├── terms.html                      Términos (borrador para revisión legal)
-├── privacy.html                    Privacidad (borrador para revisión legal)
-├── robots.txt                      Publicar en la raíz del dominio
-├── sitemap.xml
-├── assets/
-│   ├── css/styles.css
-│   ├── js/script.js
-│   ├── js/analytics.js
-│   ├── img/                        Imágenes WebP/JPG
-│   ├── fonts/                      Manrope y Orbitron (WOFF2)
-│   ├── logos/                      Logos KOA y Happi Arena
-│   └── favicon.png
-├── 01-informe/
-│   ├── 00-informe-original.md      Informe QA original (sin modificar)
-│   ├── INFORME_QA_ACTUALIZADO.md   Informe final: estado de los 22 hallazgos
-│   ├── PLAN_DE_CORRECCIONES.md     Plan priorizado y criterios de aceptación
-│   ├── CAMBIOS_REALIZADOS.md       Cambios archivo por archivo
-│   ├── REVISION_DISENO.md          Análisis visual de landing y compra
-│   ├── VERIFICACION.md             Pruebas, métricas y cómo reproducirlas
-│   └── EVIDENCIA/
-│       ├── capturas-antes/         Página en vivo (1440/1024/768/390/360)
-│       ├── capturas-despues/       Landing, página de tickets y sin JS
-│       └── lighthouse/             Informes JSON/HTML antes y después
-├── 02-despliegue/
-│   ├── nginx-koa.conf              Configuración de referencia
-│   ├── CHECKLIST_DESPLIEGUE.md     Paso a paso y verificación
-│   ├── VALIDACION_SERVIDOR.md      Checklist de backend (20 casos)
-│   └── api/checkout.example.php    Referencia, NO desplegar tal cual
-├── 03-herramientas/
-│   ├── serve.js                    Servidor local con gzip/brotli/caché
-│   ├── test-site.js                Suite funcional Playwright (35 checks)
-│   ├── shots.js                    Capturas responsive
-│   ├── lh-compare.js               Comparador de informes Lighthouse
-│   ├── package.json                Scripts `npm test`, `npm run shots`, etc.
-│   ├── package-lock.json           Versión fijada de `playwright-core`
-│   └── README.md
-└── 04-otros-proyectos/             Archivo de otros proyectos KOA (no se publica)
-    ├── escuelas/                   Assets de la landing de Escuelas
-    ├── landing-padres/             Assets y fuentes de la landing para padres
-    └── koa-2-landings-correcciones-finales-main/
-                                    Copia antigua de tickets y sponsorship
+.
+├── src/                            Sitio (Eleventy). Se construye a _site/
+│   ├── index.njk                   Página principal
+│   ├── tickets.njk                 Compra de boletos (o aviso si la venta está cerrada)
+│   ├── terms.njk / privacy.njk     Términos y privacidad (borradores para revisión legal)
+│   ├── sitemap.njk, robots.txt     SEO
+│   ├── _headers                    Cabeceras de seguridad y caché (Cloudflare Pages)
+│   ├── _includes/                  Piezas compartidas (SEO, analítica, macros)
+│   ├── _data/cms/                  CONTENIDO EDITABLE desde Pages CMS (event, home, faq, site)
+│   └── assets/                     CSS, JS, imágenes, fuentes, logos
+├── .pages.yml                      Qué campos ve el cliente en Pages CMS
+├── eleventy.config.js              Configuración del generador y atajos {dates}, {price}…
+├── package.json                    npm run dev / npm run build
+├── 01-informe/                     Informe QA original y actualizado, evidencia y Lighthouse
+├── 02-despliegue/                  Cloudflare Pages + CMS (nuevo), nginx y checkout de referencia (legado)
+└── 03-herramientas/                Pruebas Playwright, capturas, servidor local
 ```
 
 ---
@@ -62,8 +34,9 @@ KOA-QA-2026-10/
 1. **`01-informe/INFORME_QA_ACTUALIZADO.md`** — qué se encontró, qué se corrigió
    y qué sigue pendiente.
 2. **`01-informe/REVISION_DISENO.md`** — lectura de diseño y mejoras sugeridas.
-3. **`index.html`** — abrir en un navegador o servir en local.
-4. **`02-despliegue/CHECKLIST_DESPLIEGUE.md`** — antes de publicar.
+3. **`src/index.njk`** — plantilla de la landing; el contenido está en `src/_data/cms/`.
+4. **`02-despliegue/CLOUDFLARE_PAGES_Y_CMS.md`** — cómo se publica y cómo edita el cliente
+   (`CHECKLIST_DESPLIEGUE.md` y `nginx-koa.conf` quedan como referencia del plan anterior con nginx).
 5. **`02-despliegue/VALIDACION_SERVIDOR.md`** — lo que debe cerrar el backend.
 
 ---
@@ -71,21 +44,15 @@ KOA-QA-2026-10/
 ## Ver el sitio en local
 
 ```bash
-# Desde esta carpeta (la que contiene index.html)
-python -m http.server 8099
-# http://127.0.0.1:8099/
-# http://127.0.0.1:8099/tickets.html
+npm install
+npm run dev                      # http://localhost:8080
+XHOCK_STATUS=open npm run dev    # fuerza "venta abierta" para probar el formulario
+npm run build                    # genera _site/ (lo que publica Cloudflare Pages)
 ```
 
-Para medir con compresión y caché:
-
-```bash
-node 03-herramientas/serve.js
-# http://127.0.0.1:8100/tickets/   (también responde en /)
-```
-
-El servidor Node solo sirve archivos estáticos; el checkout real no funciona en
-local (el `POST` se mockea en las pruebas).
+El estado real de la venta (`open` / `soon` / `closed`) está en `src/_data/cms/event.json`.
+Despliegue, Pages CMS y guía para el cliente: **`02-despliegue/CLOUDFLARE_PAGES_Y_CMS.md`**.
+El checkout real no funciona en local (el `POST` se mockea en las pruebas).
 
 ---
 

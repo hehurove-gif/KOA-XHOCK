@@ -1807,3 +1807,46 @@ section[id]{scroll-margin-top:96px}
   .ticket-footer__inner{display:block}
   .ticket-footer nav{margin-top:10px}
 }
+
+/* ============================================================
+   Contenido editable desde Pages CMS
+   ============================================================ */
+/* **Negritas** escritas en el CMS dentro de párrafos de sección */
+.section-text strong{
+  color:var(--color-secondary);
+  font-weight:1000;
+}
+.section-light .section-text strong{color:var(--color-secondary-ink)}
+.problem-list strong{color:#fff;font-weight:900}
+
+/* Aviso cuando la venta está cerrada o aún no abre */
+.event-notice{
+  margin:0 0 18px;
+  padding:14px 18px;
+  border:1px solid rgba(235,226,102,.45);
+  border-radius:var(--radius-md);
+  background:rgba(235,226,102,.1);
+  color:#fff;
+  font-size:.95rem;
+  line-height:1.5;
+}
+.event-notice strong{
+  display:block;
+  margin-bottom:2px;
+  color:var(--color-primary);
+  font-family:var(--font-display);
+  font-size:.95rem;
+  letter-spacing:.02em;
+}
+.event-notice__inner{padding:0}
+
+/* Página de tickets sin venta */
+.ticket-closed{
+  max-width:720px;
+  padding-block:clamp(72px,12vw,140px);
+}
+.ticket-closed .btn + .btn{margin-left:12px}
+@media (max-width:520px){
+  .ticket-closed .btn{display:flex;width:100%;justify-content:center}
+  .ticket-closed .btn + .btn{margin:12px 0 0}
+}

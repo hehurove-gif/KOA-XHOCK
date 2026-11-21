@@ -1,66 +1,57 @@
+---
+permalink: tickets.html
+---
+{% from "macros.njk" import titleLines, buyButton %}
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script>document.documentElement.classList.add('js');window.dataLayer=window.dataLayer||[];</script>
-  <title>Buy XHOCK Tickets — Player Ticket $175 USD | KOA</title>
-  <meta name="description" content="Secure your XHOCK player ticket ($175 USD) for four days of international hockey at Happi Arena Cancun, October 29 – November 1. Register solo and we'll place you on a team." />
-  <link rel="icon" type="image/png" href="assets/favicon.png" />
-  <link rel="canonical" href="https://koa-hub.com/tickets/tickets.html" />
-  <meta name="robots" content="index,follow" />
-  <meta name="theme-color" content="#050505" />
-
-  <!-- Social sharing -->
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="KOA XHOCK" />
-  <meta property="og:locale" content="en_US" />
-  <meta property="og:url" content="https://koa-hub.com/tickets/tickets.html" />
-  <meta property="og:title" content="Buy XHOCK Tickets — Player Ticket $175 USD" />
-  <meta property="og:description" content="Four days of international hockey at Happi Arena Cancun, October 29 – November 1. Register solo and we'll place you on a team." />
-  <meta property="og:image" content="https://koa-hub.com/tickets/assets/img/og-xhock.jpg" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="Hockey player competing at XHOCK in Cancun" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Buy XHOCK Tickets — Player Ticket $175 USD" />
-  <meta name="twitter:description" content="Register solo and we'll place you on a team. Happi Arena Cancun, October 29 – November 1." />
-  <meta name="twitter:image" content="https://koa-hub.com/tickets/assets/img/og-xhock.jpg" />
+{%- if event.isOpen -%}
+  {%- set pageTitle = "Buy XHOCK Tickets — Player Ticket {price} {currency} | KOA" -%}
+  {%- set pageDescription = "Secure your XHOCK player ticket ({price} {currency}) for four days of international hockey at {venue}, {dates}. Register solo and we'll place you on a team." -%}
+  {%- set shareTitle = "Buy XHOCK Tickets — Player Ticket {price} {currency}" -%}
+  {%- set shareDescription = "Four days of international hockey at {venue}, {dates}. Register solo and we'll place you on a team." -%}
+{%- else -%}
+  {%- set pageTitle = "XHOCK Tickets — " + event.noticeTitle + " | KOA" -%}
+  {%- set pageDescription = event.noticeText -%}
+  {%- set shareTitle = event.noticeTitle -%}
+  {%- set shareDescription = event.noticeText -%}
+  {%- set noindex = true -%}
+{%- endif -%}
+{%- set pagePath = "tickets.html" -%}
+{% include "seo.njk" %}
 
   <link rel="preload" href="assets/fonts/Orbitron-variable-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="assets/fonts/Manrope-variable-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="assets/css/styles.css" />
+{% if event.isOpen %}
   <!-- Phone field enhancement. The page works without it: the input falls
-       back to a plain tel field if the script or CDN is unavailable. -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.2.0/build/css/intlTelInput.css" />
-  <script defer src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.2.0/build/js/intlTelInput.min.js"></script>
+       back to a plain tel field if the script is unavailable. Self-hosted. -->
+  <link rel="stylesheet" href="assets/vendor/intl-tel-input/css/intlTelInput.min.css" />
+  <script defer src="assets/vendor/intl-tel-input/js/intlTelInput.min.js"></script>
+{% endif %}
 
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "XHOCK", "item": "https://koa-hub.com/tickets/" },
-      { "@type": "ListItem", "position": 2, "name": "Tickets", "item": "https://koa-hub.com/tickets/tickets.html" }
+      { "@type": "ListItem", "position": 1, "name": "XHOCK", "item": "{{ site.url }}" },
+      { "@type": "ListItem", "position": 2, "name": "Tickets", "item": "{{ "tickets.html" | absUrl }}" }
     ]
   }
   </script>
 </head>
 <body class="ticket-page">
-  <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PPGNTDHR"
-  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
-  <noscript>
-    <img height="1" width="1" style="display:none"
-         src="https://www.facebook.com/tr?id=1026403033730229&ev=PageView&noscript=1" />
-  </noscript>
+{% include "noscript-analytics.njk" %}
 
   <a class="skip-link" href="#ticket-form">Skip to the ticket form</a>
   <noscript>
     <div class="noscript-banner" role="status">
       JavaScript is disabled in your browser. Checkout needs JavaScript.
-      <a href="https://wa.me/525579387088?text=Hi%20KOA%2C%20I%27d%20like%20to%20buy%20a%20ticket%20for%20XHOCK">Buy your ticket on WhatsApp</a>.
+      <a href="https://wa.me/{{ site.whatsappNumber }}?text=Hi%20KOA%2C%20I%27d%20like%20to%20buy%20a%20ticket%20for%20XHOCK">Buy your ticket on WhatsApp</a>.
     </div>
   </noscript>
 
@@ -77,6 +68,7 @@
     </div>
   </header>
 
+{% if event.isOpen %}
   <main class="ticket-main" id="ticket-form" tabindex="-1">
     <div class="container ticket-layout">
 
@@ -89,8 +81,8 @@
         </p>
 
         <div class="ticket-summary__price">
-          <strong>$175</strong>
-          <span>USD <em>per player</em></span>
+          <strong>{{ event.priceLabel }}</strong>
+          <span>{{ event.currency }} <em>per player</em></span>
         </div>
 
         <a class="ticket-summary__jump" href="#ticketFormTitle">
@@ -99,21 +91,19 @@
         </a>
 
         <ul class="ticket-summary__list">
-          <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Round Robin tournament format</li>
-          <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Individual player registration</li>
-          <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>XHOCK assigns you a team to compete</li>
-          <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Day of the Dead themed experience</li>
-          <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Happi Arena Cancun</li>
+          {%- for bullet in cms.home.tickets.bullets %}
+          <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>{{ bullet | fill }}</li>
+          {%- endfor %}
         </ul>
 
         <dl class="ticket-summary__meta">
           <div>
             <dt>Dates</dt>
-            <dd>October 29 – November 1, 2026</dd>
+            <dd>{{ event.dateLabel }}, {{ event.year }}</dd>
           </div>
           <div>
             <dt>Venue</dt>
-            <dd>Happi Arena Cancun</dd>
+            <dd>{{ event.venue }}</dd>
           </div>
           <div>
             <dt>Order limit</dt>
@@ -123,7 +113,7 @@
 
         <p class="ticket-summary__note">
           Need help before you buy?
-          <a href="https://wa.me/525579387088?text=Hi%20KOA%2C%20I%27d%20like%20more%20information%20about%20XHOCK" target="_blank" rel="noreferrer">Chat with KOA on WhatsApp</a>.
+          <a href="https://wa.me/{{ site.whatsappNumber }}?text=Hi%20KOA%2C%20I%27d%20like%20more%20information%20about%20XHOCK" target="_blank" rel="noreferrer">Chat with KOA on WhatsApp</a>.
         </p>
       </aside>
 
@@ -132,15 +122,15 @@
           <div class="ticket-modal__head-text">
             <span class="ticket-modal__event">XHOCK International Hockey Tournament</span>
             <div class="ticket-modal__meta">
-              <span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.5-7-10a7 7 0 0 1 14 0c0 5.5-7 10-7 10z"/><circle cx="12" cy="11" r="2.4"/></svg>Happi Arena Cancun</span>
-              <span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2.5"/><path d="M4 9.5h16"/><path d="M8 3v4M16 3v4"/></svg>Oct 29 – Nov 1</span>
+              <span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.5-7-10a7 7 0 0 1 14 0c0 5.5-7 10-7 10z"/><circle cx="12" cy="11" r="2.4"/></svg>{{ event.venue }}</span>
+              <span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2.5"/><path d="M4 9.5h16"/><path d="M8 3v4M16 3v4"/></svg>{{ event.dateShort }}</span>
             </div>
             <h2 id="ticketFormTitle">Your Information</h2>
-            <p class="ticket-modal__desc">$175 USD per player. Enter the contact details and the information for every player ticket.</p>
+            <p class="ticket-modal__desc">{{ event.priceLabel }} {{ event.currency }} per player. Enter the contact details and the information for every player ticket.</p>
           </div>
         </div>
 
-        <form class="ticket-modal__form ticket-card__form" id="ticketForm" action="api/checkout.php" method="post" novalidate>
+        <form class="ticket-modal__form ticket-card__form" id="ticketForm" action="{{ site.checkoutEndpoint }}" method="post" novalidate>
           <div class="ticket-modal__body" id="ticketFormBody">
             <div class="tm-section-label">Contact Information</div>
             <div class="tm-grid">
@@ -231,6 +221,19 @@
 
     </div>
   </main>
+{% else %}
+  <main class="ticket-main" id="ticket-form" tabindex="-1">
+    <div class="container ticket-closed">
+      <p class="eyebrow">{{ event.name }}</p>
+      <h1 class="ticket-summary__title">{{ event.noticeTitle | fill }}</h1>
+      <p class="ticket-summary__lead">{{ event.noticeText | fill }}</p>
+      <p>
+        <a class="btn btn--primary magnetic" href="{{ event.noticeButtonUrl }}" target="_blank" rel="noreferrer">{{ event.noticeButtonLabel }}</a>
+        <a class="btn btn--ghost magnetic" href="index.html">Back to XHOCK</a>
+      </p>
+    </div>
+  </main>
+{% endif %}
 
   <footer class="ticket-footer">
     <div class="container ticket-footer__inner">
@@ -243,7 +246,6 @@
     </div>
   </footer>
 
-  <script src="assets/js/analytics.js" defer></script>
-  <script src="assets/js/script.js" defer></script>
+{% include "scripts.njk" %}
 </body>
 </html>

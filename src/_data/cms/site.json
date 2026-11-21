@@ -10,5 +10,6 @@
   "footerLegal": "KOA is a private, independent organization focused on sports experiences and athlete development. This event is not affiliated with, endorsed by, or represented by any national or international hockey federations.",
   "ogImage": "assets/img/og-xhock.jpg",
   "gtmId": "GTM-PPGNTDHR",
-  "metaPixelId": "1026403033730229"
+  "metaPixelId": "1026403033730229",
+  "checkoutEndpoint": "api/checkout"
 }
