@@ -1,0 +1,13 @@
+name = "koa-tickets-proxy"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+
+# Dominio *.pages.dev del proyecto de Cloudflare Pages (cámbialo por el real).
+[vars]
+UPSTREAM_HOST = "koa-xhock.pages.dev"
+
+# Requiere que koa-hub.com esté en Cloudflare (DNS con proxy activado, nube naranja).
+routes = [
+  { pattern = "koa-hub.com/tickets", zone_name = "koa-hub.com" },
+  { pattern = "koa-hub.com/tickets/*", zone_name = "koa-hub.com" }
+]

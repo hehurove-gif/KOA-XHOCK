@@ -18,6 +18,7 @@ contenido desde Pages CMS, sin tocar código.
 | `src/assets/` | CSS, JS, imágenes, fuentes | Desarrollo |
 | `src/_headers` | Cabeceras de seguridad y caché de Cloudflare | Desarrollo |
 | `eleventy.config.js` | Configuración del generador y de los atajos `{dates}`, `{price}`… | Desarrollo |
+| `workers/tickets-proxy/` | Worker que sirve Pages en `koa-hub.com/tickets/` | Desarrollo |
 | `_site/` | Resultado del build (no se versiona) | Nadie |
 
 ## 2. Cloudflare Pages
@@ -34,11 +35,32 @@ contenido desde Pages CMS, sin tocar código.
    | Variable de entorno | `NODE_VERSION` = `22` |
 
 3. Cada commit a `main` publica solo. Cada rama y cada PR obtienen una URL de vista previa (útil para revisar antes de publicar).
-4. Dominio: *Custom domains* → añadir el dominio o subdominio elegido.
-   - **Pendiente de decidir:** hoy el sitio vive en `koa-hub.com/tickets/`. Pages publica en la raíz de un dominio
-     (`xhock.koa-hub.com`, por ejemplo). Si debe seguir en `/tickets/`, hace falta una regla o Worker en `koa-hub.com`
-     que dirija esa ruta a Pages. Al decidirlo hay que actualizar `url` en `src/_data/cms/site.json`
-     (canonical, Open Graph y sitemap lo usan).
+4. **Dirección final: `https://koa-hub.com/tickets/`** (decidido; se mantiene la URL que ya estaba publicada, así no se
+   rompen enlaces, SEO ni analítica). Pages publica en la raíz de su propio dominio (`<proyecto>.pages.dev`), así que
+   un Worker en la ruta `koa-hub.com/tickets*` sirve ese proyecto bajo el prefijo, sin tocar lo que haya en el resto
+   de koa-hub.com.
+
+   ```
+   koa-hub.com/tickets/                -> Pages: /
+   koa-hub.com/tickets/tickets.html    -> Pages: /tickets.html
+   koa-hub.com/tickets/api/checkout    -> Pages Function: /api/checkout
+   ```
+
+   Pasos (una sola vez):
+   1. Anotar el dominio `*.pages.dev` del proyecto y ponerlo en `UPSTREAM_HOST` de `workers/tickets-proxy/wrangler.toml`.
+   2. Verificar que koa-hub.com esté en Cloudflare con el DNS **con proxy activado** (nube naranja). Si el dominio está
+      en otro DNS, las rutas de Worker no funcionan y hay que moverlo, o usar un proxy inverso en el servidor actual.
+   3. `cd workers/tickets-proxy && npx wrangler deploy`.
+   4. Probar `https://koa-hub.com/tickets` (debe redirigir a `/tickets/`), `/tickets/tickets.html` y `/tickets/terms.html`.
+
+   Las pruebas del Worker: `node workers/tickets-proxy/test.mjs`. El sitio usa rutas relativas y el `canonical` ya apunta
+   a `https://koa-hub.com/tickets/`, por lo que no hay que cambiar nada más en `site.json`.
+
+   Dos detalles a tener en cuenta:
+   - Los buscadores solo leen `robots.txt` en la raíz. El `Sitemap: https://koa-hub.com/tickets/sitemap.xml` debe estar
+     también en `https://koa-hub.com/robots.txt` (el de este repo queda en `/tickets/robots.txt` y no tiene efecto).
+   - Pages quita el `.html` con una redirección (`/tickets.html` → `/tickets`); el Worker reescribe esas redirecciones
+     para conservar el prefijo.
 
 ## 3. Pages CMS
 
