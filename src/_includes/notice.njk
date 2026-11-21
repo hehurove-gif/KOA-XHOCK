@@ -1,0 +1,9 @@
+{# Aviso cuando las ventas no están abiertas (estado "closed" o "soon"). #}
+{% if not event.isOpen %}
+  <div class="event-notice" role="status">
+    <div class="event-notice__inner container">
+      <strong>{{ event.noticeTitle | fill }}</strong>
+      <span>{{ event.noticeText | fill }}</span>
+    </div>
+  </div>
+{% endif %}

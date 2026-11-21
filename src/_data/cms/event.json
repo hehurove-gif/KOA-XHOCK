@@ -1,0 +1,19 @@
+{
+  "status": "closed",
+  "name": "XHOCK by KOA",
+  "tournamentName": "XHOCK International Hockey Tournament",
+  "startDate": "2026-10-29",
+  "endDate": "2026-11-01",
+  "venue": "Happi Arena Cancun",
+  "city": "Cancún",
+  "region": "Quintana Roo",
+  "country": "MX",
+  "price": 175,
+  "currency": "USD",
+  "closedTitle": "XHOCK 2026 has ended",
+  "closedText": "Thank you to every player, family and fan who made it happen. Ticket sales are closed. Follow KOA to hear about the next edition.",
+  "soonTitle": "Tickets coming soon",
+  "soonText": "Registration for the next XHOCK opens soon. Message us on WhatsApp and we'll let you know first.",
+  "noticeButtonLabel": "Get updates on WhatsApp",
+  "noticeButtonUrl": "https://wa.me/525579387088?text=Hi%20KOA%2C%20please%20keep%20me%20posted%20about%20the%20next%20XHOCK"
+}

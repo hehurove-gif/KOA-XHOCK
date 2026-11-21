@@ -1,0 +1,71 @@
+{
+  "seoTitle": "XHOCK by KOA — International Hockey Tournament in Cancun",
+  "seoDescription": "XHOCK by KOA Sports: an international hockey tournament at {venue}, {dates}. Register as an individual player and we'll match you with a team.",
+  "shareDescription": "Four days of international hockey at {venue}, {dates}. Register solo and we'll place you on a team. Player tickets {price} {currency}.",
+  "hero": {
+    "titleLines": [
+      { "text": "Experience" },
+      { "text": "the Ultimate" },
+      { "text": "International" },
+      { "text": "Hockey", "accent": true },
+      { "text": "Tournament.", "accent": true }
+    ],
+    "intro": "XHOCK brings together players, teams, families and hockey fans from Canada, the United States and Mexico at {venue} for four unforgettable days of competition and community. Watch world-class hockey from the stands or step onto the ice by registering as an individual player.",
+    "solo": "Coming on your own? We'll match you with a team.",
+    "proof": ["Happi Arena Cancun", "Performance tracking"]
+  },
+  "marquee": {
+    "top": ["International Hockey Tournament", "Happi Arena Cancun", "Canada · USA · Mexico", "Round Robin", "Player Tickets", "{datesShort}"],
+    "bottom": ["KOA Sports", "Community", "Four unforgettable days", "Cancun", "Register solo", "We'll match you with a team"]
+  },
+  "stats": {
+    "eyebrow": "XHOCK at a glance",
+    "titleLines": [{ "text": "An international" }, { "text": "tournament in Cancun." }],
+    "priceBlurb": "Travel to Mexican paradise. Compete in an ice hockey tournament. You don’t need a team to live this amazing experience."
+  },
+  "tickets": {
+    "eyebrow": "Tickets & Registration",
+    "titleLines": [{ "text": "Join the International" }, { "text": "XHOCK Experience.", "accent": true }],
+    "cardLabel": "Player Tickets",
+    "cardText": "Register solo. We'll place you on an international team so you can compete alongside players from different nationalities in one unforgettable tournament.",
+    "bullets": ["Round Robin tournament format", "Individual player registration", "XHOCK assigns you a team to compete", "Day of the Dead themed experience", "Happi Arena Cancun"],
+    "buttonLabel": "Buy Player Ticket"
+  },
+  "context": {
+    "eyebrow": "Use Case",
+    "titleLines": [{ "text": "Experience" }, { "text": "XHOCK.", "accent": true }],
+    "quote": "Watch exciting games featuring teams from Canada, the United States and Mexico.",
+    "text": "Imagine four days where hockey brings together players, families and fans from different countries in one incredible destination. The tournament takes place during **Día de Muertos** season, giving you the chance to experience hockey and one of Mexico's most iconic, colorful celebrations in one trip. XHOCK brings you closer to a Mexican tradition known around the world—on and off the ice.",
+    "points": [
+      "Watch exciting games featuring teams from **Canada, the United States and Mexico**.",
+      "Become part of an **international hockey community** that shares the same passion for the sport.",
+      "Experience hockey alongside **one of Mexico's most iconic celebrations** during Día de Muertos season."
+    ],
+    "link": "Join the challenge. Live the experience beyond the game."
+  },
+  "value": {
+    "eyebrow": "Value Prop",
+    "titleLines": [{ "text": "More Than a Tournament." }, { "text": "An International Experience.", "accent": true }],
+    "text": "XHOCK combines competitive hockey, travel and community in one of Mexico's premier destinations. From {datesThrough}, live the tournament alongside **Día de Muertos** and experience hockey with one of Mexico's most iconic celebrations in the same trip.",
+    "steps": [
+      { "title": "International Competition", "text": "Teams and players from Canada, the United States and Mexico competing together in one tournament." },
+      { "title": "Discover Cancun", "text": "Take advantage of exclusive hotel offers specially arranged for international visitors." },
+      { "title": "Register Solo", "text": "Sign up as an individual player and XHOCK will place you on an international team." },
+      { "title": "Hockey Community", "text": "Players, families, coaches and fans united by their passion for the game." },
+      { "title": "Beyond the Game", "text": "Join the challenge and experience hockey alongside one of Mexico's most iconic celebrations." }
+    ],
+    "overlayText": "More than hockey"
+  },
+  "travel": {
+    "eyebrow": "Travel & Accommodation",
+    "titleLines": [{ "text": "Travel to Cancun" }, { "text": "with Exclusive Hotel Benefits.", "accent": true }],
+    "text": "Traveling from the United States or Canada? XHOCK has partnered with selected hotels to offer exclusive discounted rates for tournament participants and their families. Enjoy an unforgettable hockey experience while staying at trusted accommodations near the venue.",
+    "buttonLabel": "View Recommended Hotels"
+  },
+  "finalCta": {
+    "eyebrow": "Join Us",
+    "titleLines": [{ "text": "Be Part of the" }, { "text": "International Hockey Experience.", "accent": true }],
+    "text": "Whether you're coming to compete, support your favorite team or experience the excitement of international hockey, XHOCK is your destination. Join us from {datesThrough} at {venue}.",
+    "buttonLabel": "Buy Tickets"
+  }
+}
