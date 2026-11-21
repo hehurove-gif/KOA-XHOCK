@@ -550,7 +550,7 @@
       countryOrder: ['us', 'ca', 'mx'],
       dropdownContainer: dropdownHost,
       hiddenInput: () => ({ phone: 'phone', country: 'country_code' }),
-      loadUtils: () => import('https://cdn.jsdelivr.net/npm/intl-tel-input@25.2.0/build/js/utils.js')
+      loadUtils: () => import('../vendor/intl-tel-input/js/utils.js')
     });
 
     phoneInput.addEventListener('countrychange', () => {
@@ -954,7 +954,10 @@
   function safeRedirect(url) {
     try {
       const parsed = new URL(url, window.location.href);
-      if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') return false;
+      // Solo se acepta la página de pago de Stripe (o el mismo sitio, para pruebas).
+      const sameSite = parsed.origin === window.location.origin;
+      const stripe = parsed.protocol === 'https:' && /(^|\.)stripe\.com$/.test(parsed.hostname);
+      if (!sameSite && !stripe) return false;
       window.location.assign(parsed.href);
       return true;
     } catch (error) {
@@ -969,6 +972,10 @@
       if (!validateForm()) return;
 
       clearFormError();
+      // intl-tel-input necesita sus utilidades para formatear con lada; si tardan, se envía lo escrito.
+      if (phoneIti && phoneIti.promise) {
+        await Promise.race([phoneIti.promise.catch(() => {}), new Promise(resolve => window.setTimeout(resolve, 2500))]);
+      }
       syncPhoneFields();
       applyAttributionToForm();
       saveDraftNow();
@@ -1022,7 +1029,13 @@
     if (!state) return;
     if (state === 'error') {
       openTicketModal();
-      showFormError(params.get('reason') || 'We could not start the checkout. Please try again.');
+      // El motivo viene de la URL: solo se muestran mensajes conocidos, nunca texto libre.
+      const reasons = {
+        closed: 'Ticket sales are closed.',
+        invalid: 'Some of your details were not accepted. Please review the form and try again.',
+        unavailable: 'The payment provider is not available right now. Please try again in a few minutes.'
+      };
+      showFormError(reasons[params.get('reason')] || 'We could not start the checkout. Please try again.');
     } else if (state === 'cancelled') {
       openTicketModal();
       showFormError('Your checkout was cancelled — nothing was charged. Your details are still here when you are ready.');

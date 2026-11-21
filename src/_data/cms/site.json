@@ -1,0 +1,15 @@
+{
+  "url": "https://koa-hub.com/tickets/",
+  "brand": "KOA XHOCK",
+  "organizer": "KOA Sports",
+  "organizerUrl": "https://koa-hub.com/",
+  "whatsappNumber": "525579387088",
+  "instagramUrl": "https://www.instagram.com/koa.esports_mx",
+  "mapsUrl": "https://maps.app.goo.gl/orpUMna9wDp6obvEA",
+  "footerAbout": "KOA creates independent, innovative, and high-impact sports experiences to drive the growth of athletes and communities.",
+  "footerLegal": "KOA is a private, independent organization focused on sports experiences and athlete development. This event is not affiliated with, endorsed by, or represented by any national or international hockey federations.",
+  "ogImage": "assets/img/og-xhock.jpg",
+  "gtmId": "GTM-PPGNTDHR",
+  "metaPixelId": "1026403033730229",
+  "checkoutEndpoint": "api/checkout"
+}

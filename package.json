@@ -1,0 +1,18 @@
+{
+  "name": "koa-xhock-site",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Sitio XHOCK by KOA: Eleventy + Pages CMS + Cloudflare Pages",
+  "type": "module",
+  "scripts": {
+    "dev": "eleventy --serve",
+    "build": "eleventy",
+    "clean": "rm -rf _site"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.1.8"
+  },
+  "dependencies": {
+    "intl-tel-input": "25.2.0"
+  }
+}

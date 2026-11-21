@@ -1,0 +1,19 @@
+{# Títulos con líneas (el CMS guarda una lista de {text, accent}). #}
+{% macro titleLines(lines) -%}
+{%- for line in lines -%}
+<span class="line-wrap"><span class="line{% if line.accent %} line--accent{% endif %}">{{ line.text | fill }}</span></span>
+{% endfor -%}
+{%- endmacro %}
+
+{# Botón principal de compra. Con ventas cerradas o próximas, lleva al aviso/WhatsApp. #}
+{% macro buyButton(label, event, extra) -%}
+{%- if event.isOpen -%}
+<a class="btn btn--primary magnetic{{ extra }}" href="tickets.html">{{ label | fill }}
+  <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+</a>
+{%- else -%}
+<a class="btn btn--primary magnetic{{ extra }}" href="{{ event.noticeButtonUrl }}" target="_blank" rel="noreferrer">{{ event.noticeButtonLabel }}
+  <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+</a>
+{%- endif -%}
+{%- endmacro %}

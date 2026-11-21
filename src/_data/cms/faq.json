@@ -1,0 +1,14 @@
+{
+  "intro": "Everything you need to know about attending or registering for XHOCK.",
+  "items": [
+    { "question": "Do I need a team to register?", "answer": "No. You can register as an individual player. XHOCK will assign you to a team so you can compete, connect with new friends and live the tournament experience." },
+    { "question": "What do I need to bring to the tournament?", "answer": "All you need is your hockey equipment, a competitive attitude, the desire to make friends and have fun." },
+    { "question": "Can I register with friends?", "answer": "Yes. Bring as many friends as you like—the more friends, the more competitive and fun it gets." },
+    { "question": "What does my registration include?", "answer": "Your participation in the tournament, the commemorative jersey, activities and additional experiences." },
+    { "question": "Can I attend with someone who isn't playing?", "answer": "Yes. Companions can attend activities that are open to the public, although some experiences may be exclusive to players." },
+    { "question": "What does XHOCK mean?", "answer": "XHOCK represents a new way to experience hockey: more intense, more social and more experiential. It's the shock of living the unexpected." },
+    { "question": "Why XHOCK?", "answer": "Because hockey doesn't end when the whistle blows. It's the experience beyond the game." },
+    { "question": "Where is the tournament held?", "answer": "At Happi Arena Cancun, Mexico." },
+    { "question": "Are hotel packages available?", "answer": "Yes. International visitors can access exclusive rates at selected partner hotels recommended by XHOCK." }
+  ]
+}
