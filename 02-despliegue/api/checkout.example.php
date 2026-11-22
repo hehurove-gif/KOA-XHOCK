@@ -1,4 +1,5 @@
 <?php
+// OBSOLETO: referencia historica. El checkout real esta en functions/api/checkout.js (Cloudflare Pages Functions).
 declare(strict_types=1);
 
 /**

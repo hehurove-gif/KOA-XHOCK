@@ -358,6 +358,12 @@ content:
   - name: footerLegal
     label: Pie de página — aviso legal
     type: text
+  - name: developerName
+    label: Pie de página — crédito "Developed by"
+    type: string
+  - name: developerUrl
+    label: Enlace del crédito (opcional; vacío = solo texto)
+    type: string
   - name: gtmId
     label: Google Tag Manager (ID)
     type: string

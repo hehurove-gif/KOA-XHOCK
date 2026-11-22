@@ -52,7 +52,7 @@ npm run build                    # genera _site/ (lo que publica Cloudflare Page
 
 El estado real de la venta (`open` / `soon` / `closed`) está en `src/_data/cms/event.json`.
 Despliegue, Pages CMS y guía para el cliente: **`02-despliegue/CLOUDFLARE_PAGES_Y_CMS.md`**.
-El checkout real no funciona en local (el `POST` se mockea en las pruebas).
+El checkout (Stripe + D1) se prueba en local con `npm run test` y `npm run test:e2e` (workerd real + Stripe simulado). Ver `02-despliegue/CHECKOUT_STRIPE_D1.md`.
 
 ---
 

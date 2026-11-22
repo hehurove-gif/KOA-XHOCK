@@ -1,0 +1,18 @@
+# Configuración de Cloudflare Pages (proyecto + Functions + D1).
+# Documentación: https://developers.cloudflare.com/pages/functions/wrangler-configuration/
+name = "koa-xhock"
+pages_build_output_dir = "_site"
+compatibility_date = "2025-01-01"
+
+# Base de datos de registros. Crear con:  npx wrangler d1 create koa-xhock
+# y pegar aquí el "database_id" que imprime el comando.
+[[d1_databases]]
+binding = "DB"
+database_name = "koa-xhock"
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"
+
+# Variables no secretas (los secretos —llaves de Stripe, tokens— se cargan en el panel de Pages,
+# nunca en este archivo). Ver 02-despliegue/CHECKOUT_STRIPE_D1.md.
+[vars]
+TERMS_VERSION = "draft-2026-11"

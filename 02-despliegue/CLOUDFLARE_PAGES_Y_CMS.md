@@ -114,13 +114,7 @@ python3 -m http.server 8099 --directory _site &
 cd 03-herramientas && npm ci && CHROME_PATH=/ruta/a/chrome node test-site.js
 ```
 
-## 5. Checkout (pendiente)
+## 5. Checkout (Stripe + D1)
 
-El formulario envía un `POST` a `api/checkout` (`checkoutEndpoint` en `site.json`). **Ese endpoint todavía no existe.**
-Con la venta cerrada no hace falta. Para una próxima edición, en Cloudflare Pages va como **Pages Function**
-(`functions/api/checkout.js`), que valida los datos (mismas reglas que el cliente: `VALIDACION_SERVIDOR.md`),
-crea la sesión de Stripe Checkout y devuelve `{ "url": "…" }`. Las llaves van como *secrets* de Cloudflare, nunca en el repo.
-La referencia de validación está en `02-despliegue/api/checkout.example.php`.
-
-Decisiones que faltan para escribirlo: cuenta de Stripe y llaves, precio o *Price ID*, adónde llegan los registros
-(correo, Zapier, Google Sheets o base de datos) y límites definitivos de boletos y edades.
+Ya implementado: `functions/api/checkout.js`, `stripe-webhook.js` y `admin/registrations.js`, con base de datos D1.
+Pasos de configuración (cuentas, secrets, webhook, pruebas) en **`CHECKOUT_STRIPE_D1.md`**.

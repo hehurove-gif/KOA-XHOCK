@@ -1,3 +1,5 @@
+> **Obsoleto.** El checkout real ya está en `functions/` (Stripe + D1). Ver `CHECKOUT_STRIPE_D1.md`. Este documento queda como checklist de QA histórico.
+
 # Validación del servidor — checkout XHOCK
 
 Este documento cubre lo que **no se puede comprobar desde el navegador** y que

@@ -27,4 +27,17 @@ r = await worker.fetch(new Request('https://koa-hub.com/tickets/tickets.html'), 
 assert.equal(r.status, 308); assert.equal(r.headers.get('Location'), 'https://koa-hub.com/tickets/tickets');
 r = await worker.fetch(new Request('https://koa-hub.com/tickets'), env);
 assert.equal(r.status, 301); assert.equal(r.headers.get('Location'), 'https://koa-hub.com/tickets/');
+// IP del visitante reenviada con secreto; lo que mande el cliente se descarta
+let forwarded;
+globalThis.fetch = async (req) => { forwarded = req.headers; return new Response('ok'); };
+await worker.fetch(new Request('https://koa-hub.com/tickets/api/checkout', {
+  method: 'POST', body: 'x', headers: { 'CF-Connecting-IP': '203.0.113.7', 'X-Proxy-Client-IP': '6.6.6.6', 'X-Proxy-Secret': 'falso' }
+}), { UPSTREAM_HOST: H, PROXY_SECRET: 'secreto-real' });
+assert.equal(forwarded.get('X-Proxy-Client-IP'), '203.0.113.7');
+assert.equal(forwarded.get('X-Proxy-Secret'), 'secreto-real');
+await worker.fetch(new Request('https://koa-hub.com/tickets/api/checkout', {
+  method: 'POST', body: 'x', headers: { 'X-Proxy-Client-IP': '6.6.6.6', 'X-Proxy-Secret': 'falso' }
+}), { UPSTREAM_HOST: H });
+assert.equal(forwarded.get('X-Proxy-Client-IP'), null, 'sin PROXY_SECRET no se reenvía nada');
+assert.equal(forwarded.get('X-Proxy-Secret'), null);
 console.log('worker tests: all passed');

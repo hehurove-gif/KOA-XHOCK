@@ -40,6 +40,14 @@ export default {
 
     const upstreamRequest = new Request(mapped.upstream, request);
     upstreamRequest.headers.set('X-Forwarded-Host', url.host);
+    // Cloudflare ve la IP del Worker, no la del visitante: se reenvía firmada con PROXY_SECRET
+    // (las Functions solo confían en ella si el secreto coincide). Lo que mande el cliente se descarta.
+    upstreamRequest.headers.delete('X-Proxy-Client-IP');
+    upstreamRequest.headers.delete('X-Proxy-Secret');
+    if (env.PROXY_SECRET) {
+      upstreamRequest.headers.set('X-Proxy-Client-IP', request.headers.get('CF-Connecting-IP') || '');
+      upstreamRequest.headers.set('X-Proxy-Secret', env.PROXY_SECRET);
+    }
     const response = await fetch(upstreamRequest, { redirect: 'manual' });
 
     if (response.status >= 300 && response.status < 400) {
