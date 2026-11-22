@@ -120,3 +120,16 @@ cd 03-herramientas && npm ci && CHROME_PATH=/ruta/a/chrome node test-site.js
 
 Ya implementado: `functions/api/checkout.js`, `stripe-webhook.js` y `admin/registrations.js`, con base de datos D1.
 Pasos de configuración (cuentas, secrets, webhook, pruebas) en **`CHECKOUT_STRIPE_D1.md`**.
+
+
+## Consentimiento de analítica
+
+`site.json → analyticsConsent` (editable en Pages CMS, campo "Consentimiento de analítica"):
+- `banner` (por defecto): GTM y Meta Pixel **no cargan** hasta que el visitante acepta en el banner. La elección se guarda
+  en `localStorage` (`koa_analytics_consent`) y se cambia desde "Cookie settings" en el pie.
+- `auto`: comportamiento anterior (cargan tras la primera interacción o a los 5 s).
+KOA debe decidir con su asesor legal cuál usar; `privacy.njk` describe el modo `banner`.
+
+## CI
+
+`.github/workflows/ci.yml` corre build, pruebas y `wrangler deploy --dry-run` en cada push a `main` y en cada PR.

@@ -13,5 +13,6 @@
   "metaPixelId": "1026403033730229",
   "checkoutEndpoint": "api/checkout",
   "developerName": "Hetor",
-  "developerUrl": ""
+  "developerUrl": "",
+  "analyticsConsent": "banner"
 }

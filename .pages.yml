@@ -370,3 +370,8 @@ content:
   - name: metaPixelId
     label: Meta Pixel (ID)
     type: string
+  - name: analyticsConsent
+    label: Consentimiento de analítica (banner = pide permiso antes de cargar GTM/Pixel; auto = carga tras la primera interacción)
+    type: select
+    options:
+      values: [banner, auto]
