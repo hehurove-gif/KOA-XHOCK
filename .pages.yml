@@ -16,15 +16,31 @@ content:
     type: select
     required: true
     description: Abierta = se muestran botones de compra y el formulario. Próximamente / Cerrada = se ocultan y aparece el
-      aviso de abajo.
+      aviso de abajo. Automática = abre y cierra sola con las fechas de "Ventana de venta" (hora de Cancún).
     options:
       values:
+      - name: auto
+        label: Automática (según las fechas de la ventana de venta)
       - name: open
         label: Abierta (se pueden comprar boletos)
       - name: soon
         label: Próximamente
       - name: closed
         label: Cerrada (el evento ya pasó)
+  - name: salesOpensAt
+    label: 'Ventana de venta — apertura (AAAA-MM-DDTHH:mm, hora de Cancún; ej. 2027-02-01T10:00)'
+    type: string
+    description: Solo se usa con estado Automática. Antes de esta fecha se muestra "Próximamente". Puedes usar {opens} en el texto del aviso.
+    pattern:
+      regex: '^(\d{4}-\d{2}-\d{2}([T ]\d{2}:\d{2})?)?$'
+      message: 'Formato AAAA-MM-DDTHH:mm, por ejemplo 2027-02-01T10:00 (o solo la fecha)'
+  - name: salesClosesAt
+    label: 'Ventana de venta — cierre (AAAA-MM-DDTHH:mm, hora de Cancún; ej. 2027-04-30T23:59)'
+    type: string
+    description: Solo se usa con estado Automática. Desde esta hora se cierra la venta. Si solo pones la fecha, cierra al terminar ese día.
+    pattern:
+      regex: '^(\d{4}-\d{2}-\d{2}([T ]\d{2}:\d{2})?)?$'
+      message: 'Formato AAAA-MM-DDTHH:mm, por ejemplo 2027-04-30T23:59 (o solo la fecha)'
   - name: name
     label: Nombre corto del evento
     type: string

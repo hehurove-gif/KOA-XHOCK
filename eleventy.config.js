@@ -15,6 +15,8 @@ function fill(value) {
     .replaceAll('{venue}', event.venue)
     .replaceAll('{price}', event.priceLabel)
     .replaceAll('{currency}', event.currency)
+    .replaceAll('{opens}', event.opensAtLabel)
+    .replaceAll('{closes}', event.closesAtLabel)
     .replaceAll('{year}', String(event.year));
 }
 

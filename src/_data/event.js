@@ -1,6 +1,7 @@
 // Datos derivados del evento. El cliente edita src/_data/cms/event.json
 // (desde Pages CMS); aquí solo se calculan textos y estados a partir de eso.
 import { readFileSync } from 'node:fs';
+import { salesState, formatLocal } from '../../functions/_lib/window.js';
 
 const raw = JSON.parse(readFileSync(new URL('./cms/event.json', import.meta.url), 'utf8'));
 
@@ -25,12 +26,17 @@ const dateThrough = sameDay ? long(start) : sameMonth ? `${long(start)} through 
 const days = Math.round((Date.UTC(end.year, end.month, end.day) - Date.UTC(start.year, start.month, start.day)) / 86400000) + 1;
 
 // XHOCK_STATUS=open npm run build permite previsualizar/probar otro estado sin tocar el JSON.
+// status "auto": abre y cierra solo según salesOpensAt / salesClosesAt (hora de Cancún). En el sitio publicado el
+// Worker elige la versión correcta de cada página con la hora real (ver scripts/build.mjs y worker/index.js).
 const requested = process.env.XHOCK_STATUS || raw.status;
-const status = ['open', 'soon', 'closed'].includes(requested) ? requested : 'closed';
+const status = salesState({ ...raw, status: requested });
 
 export default {
   ...raw,
   status,
+  isAuto: requested === 'auto',
+  opensAtLabel: formatLocal(raw.salesOpensAt),
+  closesAtLabel: formatLocal(raw.salesClosesAt),
   isOpen: status === 'open',
   isClosed: status === 'closed',
   isSoon: status === 'soon',

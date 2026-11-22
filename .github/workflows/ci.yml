@@ -19,3 +19,4 @@ jobs:
       - run: npx playwright-core install --with-deps chromium
       - run: npm run test:e2e
       - run: npm run test:browser
+      - run: npm run test:window

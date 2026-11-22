@@ -6,7 +6,7 @@ export const WEBHOOK_SECRET = 'whsec_e2e';
 export const ADMIN_TOKEN = 'e2e-admin-token-'.padEnd(40, 'x');
 export const RUN = Date.now().toString(36);
 
-export async function startStack({ port = 8788, stripePort = 8765, extraVars = [] } = {}) {
+export async function startStack({ port = 8788, stripePort = 8765, extraVars = [], status = 'open' } = {}) {
   const base = `http://127.0.0.1:${port}`;
   const stripeCalls = [];
   const stripe = http.createServer((req, res) => {
@@ -23,7 +23,7 @@ export async function startStack({ port = 8788, stripePort = 8765, extraVars = [
   const dev = spawn('npx', [
     'wrangler', 'dev', '-c', 'wrangler.dev.toml', '--port', String(port), '--ip', '127.0.0.1',
     '--var', 'STRIPE_SECRET_KEY:sk_test_e2e', `STRIPE_WEBHOOK_SECRET:${WEBHOOK_SECRET}`,
-    `STRIPE_API_BASE:http://127.0.0.1:${stripePort}`, 'XHOCK_STATUS:open', `ADMIN_TOKEN:${ADMIN_TOKEN}`,
+    `STRIPE_API_BASE:http://127.0.0.1:${stripePort}`, `XHOCK_STATUS:${status}`, `ADMIN_TOKEN:${ADMIN_TOKEN}`,
     `PUBLIC_BASE_URL:${base}/`, ...extraVars
   ], { stdio: ['ignore', 'pipe', 'pipe'] });
   const stack = { base, stripeCalls, log: '', stop() { dev.kill('SIGTERM'); stripe.close(); } };

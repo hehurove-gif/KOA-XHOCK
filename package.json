@@ -6,13 +6,14 @@
   "type": "module",
   "scripts": {
     "dev": "eleventy --serve",
-    "build": "eleventy",
+    "build": "node scripts/build.mjs",
     "clean": "rm -rf _site",
     "test": "node --no-warnings --test functions/test/*.test.js && node workers/tickets-proxy/test.mjs",
     "test:e2e": "npm run build && npm run db:migrate:local && node functions/test/e2e-local.mjs",
     "db:migrate:local": "wrangler d1 migrations apply koa-xhock --local -c wrangler.dev.toml",
     "db:migrate:remote": "wrangler d1 migrations apply koa-xhock --remote",
     "dev:worker": "npm run build && wrangler dev -c wrangler.dev.toml",
+    "test:window": "XHOCK_STATUS=auto npm run build && npm run db:migrate:local && node functions/test/e2e-window.mjs",
     "test:browser": "XHOCK_STATUS=open npm run build && npm run db:migrate:local && node functions/test/browser-e2e.mjs"
   },
   "devDependencies": {

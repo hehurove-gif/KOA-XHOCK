@@ -38,6 +38,23 @@ Probado: `npm test` (32 pruebas + proxy) y `npm run test:e2e` (workerd real, D1 
 4. Reembolsar desde Stripe → el pedido pasa a `refunded`.
 5. Cambiar a llaves `sk_live_` + webhook live, y hacer una compra real mínima con reembolso.
 
+## Ventana de venta (abre y cierra sola)
+
+En Pages CMS → **Evento**:
+1. **Estado de la venta** = *Automática*.
+2. **Ventana de venta — apertura**: `AAAA-MM-DDTHH:mm`, hora de Cancún. Ej. `2027-02-01T10:00`.
+3. **Ventana de venta — cierre**: ej. `2027-04-30T23:59` (si solo pones la fecha, cierra al terminar ese día).
+4. Guardar → se hace commit y Cloudflare vuelve a desplegar (1–2 min). A partir de ahí no hay que tocar nada más.
+
+Qué pasa: antes de la apertura el sitio muestra "Próximamente"; desde la hora de apertura aparecen los botones y el
+formulario; desde la hora de cierre vuelve el aviso de "Cerrada". El cambio se nota en ≤ 30 s (el Worker elige la
+versión de la página con la hora real) y **el servidor rechaza compras fuera de la ventana** aunque alguien tenga la
+página abierta de antes. En el aviso puedes escribir `{opens}` / `{closes}` para mostrar las fechas
+(ej. "Registration opens {opens}."). Sin fechas, el modo automático se queda cerrado. Para forzar un estado
+sin esperar: cambiar el estado a *Abierta* / *Cerrada* (o el secret `XHOCK_STATUS`). Para mover las fechas sin
+redeploy: secret `EVENT_OVERRIDES` = `{"salesOpensAt":"2027-02-01T10:00","salesClosesAt":"2027-04-30T23:59"}`.
+Probado en workerd real: `npm run test:window`.
+
 ## Tarifas por categoría (junior, preventa)
 
 Todo se edita en Pages CMS → Evento (campos vacíos = sin esa tarifa; con solo `price` rige un precio único):

@@ -8,7 +8,7 @@ compatibility_date = "2025-01-01"
 [assets]
 directory = "_site"
 binding = "ASSETS"
-run_worker_first = ["/api/*"]
+run_worker_first = ["/api/*", "/_v/*", "/", "/index.html", "/tickets", "/tickets.html"]
 
 # Base de datos de registros (D1). Está COMENTADA a propósito: con un database_id falso, el despliegue en
 # Cloudflare falla ("Invalid database UUID"). Cuando exista la base real:
