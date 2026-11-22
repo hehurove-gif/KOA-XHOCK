@@ -1,22 +1,14 @@
 // POST /api/admin/team  { "player_ids": [1,2,3], "team": "Azul" }  — asigna (o limpia, con "") el equipo de varios jugadores.
 // Mismo token que el listado. Solo toca la columna players.team.
-import { json, methodNotAllowed, timingSafeEqual } from '../../_lib/http.js';
+import { json, methodNotAllowed } from '../../_lib/http.js';
+import { adminGate } from '../../_lib/admin-auth.js';
 
 const MAX_IDS = 300;
 
-function authorized(request, env) {
-  const token = env.ADMIN_TOKEN;
-  if (!token || token.length < 24) return null;
-  const header = request.headers.get('Authorization') || '';
-  const supplied = header.startsWith('Bearer ') ? header.slice(7) : '';
-  return supplied !== '' && timingSafeEqual(supplied, token);
-}
 
 export async function onRequestPost({ request, env }) {
-  const auth = authorized(request, env);
-  if (auth === null) return json(503, { error: 'Admin access is not configured.' });
-  if (!auth) return json(401, { error: 'Unauthorized.' }, { 'WWW-Authenticate': 'Bearer' });
-  if (!env.DB) return json(503, { error: 'Database is not configured.' });
+  const denied = await adminGate(request, env);
+  if (denied) return denied;
 
   let body;
   try { body = await request.json(); } catch { return json(400, { error: 'Malformed JSON body.' }); }

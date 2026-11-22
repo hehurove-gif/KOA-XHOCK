@@ -1,18 +1,12 @@
 // GET /api/admin/registrations[?status=paid][&q=texto][&country=MX][&team=Azul|unassigned][&from=YYYY-MM-DD][&to=YYYY-MM-DD][&format=csv]
 // Listado + resumen (totales, ingresos, tallas, posiciones, países) para el equipo de KOA.
 // Protegido con un token (ADMIN_TOKEN). Recomendado además: Cloudflare Access delante de /api/admin/* y /admin/*.
-import { json, methodNotAllowed, timingSafeEqual } from '../../_lib/http.js';
+import { json, methodNotAllowed } from '../../_lib/http.js';
+import { adminGate } from '../../_lib/admin-auth.js';
 
 const STATUSES = ['pending', 'awaiting_payment', 'paid', 'failed', 'expired', 'refunded', 'review'];
 const MAX_ROWS = 5000;
 
-function authorized(request, env) {
-  const token = env.ADMIN_TOKEN;
-  if (!token || token.length < 24) return null; // sin token fuerte, el panel queda deshabilitado
-  const header = request.headers.get('Authorization') || '';
-  const supplied = header.startsWith('Bearer ') ? header.slice(7) : '';
-  return supplied !== '' && timingSafeEqual(supplied, token);
-}
 
 // Evita que una celda comience con = + - @ (inyección de fórmulas al abrir el CSV en Excel/Sheets).
 export function csvCell(value) {
@@ -65,10 +59,8 @@ const CSV_COLUMNS = [
 ];
 
 export async function onRequestGet({ request, env }) {
-  const auth = authorized(request, env);
-  if (auth === null) return json(503, { error: 'Admin access is not configured.' });
-  if (!auth) return json(401, { error: 'Unauthorized.' }, { 'WWW-Authenticate': 'Bearer' });
-  if (!env.DB) return json(503, { error: 'Database is not configured.' });
+  const denied = await adminGate(request, env);
+  if (denied) return denied;
 
   const url = new URL(request.url);
   const status = url.searchParams.get('status');

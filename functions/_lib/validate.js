@@ -13,6 +13,8 @@ const ATTRIBUTION_KEYS = new Set([
   'landing_page', 'attribution_referrer', 'first_seen', 'last_seen'
 ]);
 
+const TOP_LEVEL_KEYS = new Set(['firstName', 'lastName', 'email', 'phone', 'country', 'country_code', 'quantity', 'terms', 'company', 'cf-turnstile-response']);
+
 // El formulario envía el nombre del país del select ("Mexico"); también se acepta el código ISO de 2 letras.
 // "Other" usa el país elegido en el selector de teléfono (country_code) o "ZZ" (desconocido).
 const COUNTRY_NAMES = { CANADA: 'CA', 'UNITED STATES': 'US', USA: 'US', MEXICO: 'MX', 'MÉXICO': 'MX' };
@@ -44,8 +46,8 @@ export function parseForm(entries) {
       out.players.get(index)[player[2]] = raw;
     } else if (ATTRIBUTION_KEYS.has(key)) {
       out.attribution[key] = cleanText(raw).replace(/[<>]/g, '').slice(0, 300);
-    } else if (!key.startsWith('players[') && !(key in out)) {
-      out[key] = raw;
+    } else if (TOP_LEVEL_KEYS.has(key) && !Object.hasOwn(out, key)) {
+      out[key] = raw.slice(0, 2100); // tope por campo; la validación posterior es la que decide
     }
   }
   out.players = [...out.players.entries()].sort((a, b) => a[0] - b[0]).map(([, p]) => p);

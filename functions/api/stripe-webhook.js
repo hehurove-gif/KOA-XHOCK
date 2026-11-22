@@ -64,7 +64,10 @@ export async function onRequestPost({ request, env }) {
     return json(503, { error: 'Webhook is not configured.' });
   }
 
+  // Un evento de Stripe pesa pocos KB: se descarta cualquier cuerpo desproporcionado antes de leerlo.
+  if (Number(request.headers.get('Content-Length') || 0) > 262144) return json(413, { error: 'Payload too large.' });
   const rawBody = await request.text();
+  if (rawBody.length > 262144) return json(413, { error: 'Payload too large.' });
   const valid = await verifyWebhook(rawBody, request.headers.get('Stripe-Signature'), env.STRIPE_WEBHOOK_SECRET);
   if (!valid) return json(400, { error: 'Invalid signature.' });
 
