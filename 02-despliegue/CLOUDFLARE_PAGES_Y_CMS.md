@@ -21,33 +21,35 @@ contenido desde Pages CMS, sin tocar código.
 | `workers/tickets-proxy/` | Worker que sirve Pages en `koa-hub.com/tickets/` | Desarrollo |
 | `_site/` | Resultado del build (no se versiona) | Nadie |
 
-## 2. Cloudflare Pages
+## 2. Cloudflare Workers (sitio + API)
 
-1. Cloudflare → *Workers & Pages* → *Create* → *Pages* → *Connect to Git* → elegir este repo.
+El proyecto es un **Worker con Static Assets** (`wrangler.toml`): sirve `_site` y atiende `/api/*` con `worker/index.js`
+(que reutiliza `functions/api/*`).
+
+1. Cloudflare → *Workers & Pages* → *Create* → *Import a repository* (Workers Builds) → elegir este repo.
 2. Configuración de build:
 
    | Campo | Valor |
    |---|---|
    | Production branch | `main` |
-   | Framework preset | None |
    | Build command | `npm run build` |
-   | Build output directory | `_site` |
+   | Deploy command | `npx wrangler deploy` |
    | Variable de entorno | `NODE_VERSION` = `22` |
 
-3. Cada commit a `main` publica solo. Cada rama y cada PR obtienen una URL de vista previa (útil para revisar antes de publicar).
+3. Cada commit a `main` publica solo. Las ramas generan versiones de vista previa (Workers Builds).
 4. **Dirección final: `https://koa-hub.com/tickets/`** (decidido; se mantiene la URL que ya estaba publicada, así no se
-   rompen enlaces, SEO ni analítica). Pages publica en la raíz de su propio dominio (`<proyecto>.pages.dev`), así que
+   rompen enlaces, SEO ni analítica). El Worker publica en la raíz de su propio dominio (`<proyecto>.<subdominio>.workers.dev`), así que
    un Worker en la ruta `koa-hub.com/tickets*` sirve ese proyecto bajo el prefijo, sin tocar lo que haya en el resto
    de koa-hub.com.
 
    ```
-   koa-hub.com/tickets/                -> Pages: /
-   koa-hub.com/tickets/tickets.html    -> Pages: /tickets.html
-   koa-hub.com/tickets/api/checkout    -> Pages Function: /api/checkout
+   koa-hub.com/tickets/                -> Worker (assets): /
+   koa-hub.com/tickets/tickets.html    -> Worker (assets): /tickets.html
+   koa-hub.com/tickets/api/checkout    -> Worker: /api/checkout
    ```
 
    Pasos (una sola vez):
-   1. Anotar el dominio `*.pages.dev` del proyecto y ponerlo en `UPSTREAM_HOST` de `workers/tickets-proxy/wrangler.toml`.
+   1. Anotar el dominio `*.workers.dev` del Worker (activar workers.dev en Settings → Domains & Routes) y ponerlo en `UPSTREAM_HOST` de `workers/tickets-proxy/wrangler.toml`.
    2. Verificar que koa-hub.com esté en Cloudflare con el DNS **con proxy activado** (nube naranja). Si el dominio está
       en otro DNS, las rutas de Worker no funcionan y hay que moverlo, o usar un proxy inverso en el servidor actual.
    3. `cd workers/tickets-proxy && npx wrangler deploy`.
@@ -59,7 +61,7 @@ contenido desde Pages CMS, sin tocar código.
    Dos detalles a tener en cuenta:
    - Los buscadores solo leen `robots.txt` en la raíz. El `Sitemap: https://koa-hub.com/tickets/sitemap.xml` debe estar
      también en `https://koa-hub.com/robots.txt` (el de este repo queda en `/tickets/robots.txt` y no tiene efecto).
-   - Pages quita el `.html` con una redirección (`/tickets.html` → `/tickets`); el Worker reescribe esas redirecciones
+   - Cloudflare quita el `.html` con una redirección (`/tickets.html` → `/tickets`); el Worker reescribe esas redirecciones
      para conservar el prefijo.
 
 ## 3. Pages CMS

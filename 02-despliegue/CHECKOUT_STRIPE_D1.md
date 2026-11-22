@@ -13,11 +13,11 @@ Probado: `npm test` (32 pruebas + proxy) y `npm run test:e2e` (workerd real, D1 
    funcionan tarjetas. Copiar la llave secreta (`sk_test_…` para pruebas, `sk_live_…` para producción).
 2. **D1**: `npx wrangler login` → `npx wrangler d1 create koa-xhock` → en `wrangler.toml` descomentar el bloque `[[d1_databases]]` y pegar el `database_id`
    → `npm run db:migrate:remote` → commit. (Está comentado porque un id falso hace fallar el despliegue en Pages.)
-3. **Pages → Settings → Variables and Secrets** (Production y Preview):
+3. **Worker → Settings → Variables and Secrets** (tipo **Secret**; las variables de texto puestas en el panel se borran en cada deploy porque `wrangler.toml` manda):
    - Secrets: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `ADMIN_TOKEN` (≥24 caracteres aleatorios), `PROXY_SECRET` (el mismo en el Worker).
    - Opcionales: `RESEND_API_KEY`, `MAIL_FROM`, `NOTIFY_EMAIL` (correos de confirmación/aviso), `HASH_SALT`, `PUBLIC_BASE_URL` (`https://koa-hub.com/tickets/`).
-4. **Webhook de Stripe** → Developers → Webhooks → endpoint `https://<proyecto>.pages.dev/api/stripe-webhook`
-   (directo al `pages.dev`, no por el Worker) con eventos: `checkout.session.completed`,
+4. **Webhook de Stripe** → Developers → Webhooks → endpoint `https://koa-xhock.<subdominio>.workers.dev/api/stripe-webhook`
+   (directo al `workers.dev`, no por el proxy de /tickets) con eventos: `checkout.session.completed`,
    `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`,
    `checkout.session.expired`, `charge.refunded`. Copiar el *signing secret* (`whsec_…`) a `STRIPE_WEBHOOK_SECRET`.
 5. **Worker proxy** (`workers/tickets-proxy`): `npx wrangler secret put PROXY_SECRET`, ajustar `UPSTREAM_HOST`, `npx wrangler deploy`.

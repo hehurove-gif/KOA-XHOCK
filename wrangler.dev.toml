@@ -1,7 +1,12 @@
-# Solo para las migraciones locales (npm run db:migrate:local). No se despliega (Pages no admite rutas de config propias).
+# Solo desarrollo local (npm run db:migrate:local, npm run dev:worker, npm run test:e2e). No se despliega.
 name = "koa-xhock"
-pages_build_output_dir = "_site"
+main = "worker/index.js"
 compatibility_date = "2025-01-01"
+
+[assets]
+directory = "_site"
+binding = "ASSETS"
+run_worker_first = ["/api/*"]
 
 [[d1_databases]]
 binding = "DB"

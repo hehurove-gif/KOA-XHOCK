@@ -1,11 +1,17 @@
-# Configuración de Cloudflare Pages (proyecto + Functions + D1).
-# Documentación: https://developers.cloudflare.com/pages/functions/wrangler-configuration/
+# Worker con Static Assets (sitio + API + D1). Se despliega con `npx wrangler deploy` (Workers Builds).
+# Documentación: https://developers.cloudflare.com/workers/static-assets/
 name = "koa-xhock"
-pages_build_output_dir = "_site"
+main = "worker/index.js"
 compatibility_date = "2025-01-01"
 
+# Sitio estático (Eleventy) + API en el mismo Worker. Solo /api/* pasa primero por el código.
+[assets]
+directory = "_site"
+binding = "ASSETS"
+run_worker_first = ["/api/*"]
+
 # Base de datos de registros (D1). Está COMENTADA a propósito: con un database_id falso, el despliegue en
-# Cloudflare Pages falla ("Invalid database UUID"). Cuando exista la base real:
+# Cloudflare falla ("Invalid database UUID"). Cuando exista la base real:
 #   1) npx wrangler d1 create koa-xhock        (imprime el database_id)
 #   2) descomentar este bloque y pegar el id
 #   3) npm run db:migrate:remote
@@ -16,7 +22,7 @@ compatibility_date = "2025-01-01"
 # database_id = "PEGAR-AQUI-EL-ID-REAL"
 # migrations_dir = "migrations"
 
-# Variables no secretas (los secretos —llaves de Stripe, tokens— se cargan en el panel de Pages,
+# Variables no secretas (los secretos —llaves de Stripe, tokens— se cargan en el panel de Cloudflare (Settings → Variables and Secrets, tipo Secret),
 # nunca en este archivo). Ver 02-despliegue/CHECKOUT_STRIPE_D1.md.
 [vars]
 TERMS_VERSION = "draft-2026-11"

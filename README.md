@@ -15,7 +15,7 @@ despliegue.
 │   ├── tickets.njk                 Compra de boletos (o aviso si la venta está cerrada)
 │   ├── terms.njk / privacy.njk     Términos y privacidad (borradores para revisión legal)
 │   ├── sitemap.njk, robots.txt     SEO
-│   ├── _headers                    Cabeceras de seguridad y caché (Cloudflare Pages)
+│   ├── _headers                    Cabeceras de seguridad y caché (Cloudflare Workers Assets)
 │   ├── _includes/                  Piezas compartidas (SEO, analítica, macros)
 │   ├── _data/cms/                  CONTENIDO EDITABLE desde Pages CMS (event, home, faq, site)
 │   └── assets/                     CSS, JS, imágenes, fuentes, logos
@@ -23,7 +23,7 @@ despliegue.
 ├── eleventy.config.js              Configuración del generador y atajos {dates}, {price}…
 ├── package.json                    npm run dev / npm run build
 ├── 01-informe/                     Informe QA original y actualizado, evidencia y Lighthouse
-├── 02-despliegue/                  Cloudflare Pages + CMS (nuevo), nginx y checkout de referencia (legado)
+├── 02-despliegue/                  Cloudflare Workers + CMS (nuevo), nginx y checkout de referencia (legado)
 └── 03-herramientas/                Pruebas Playwright, capturas, servidor local
 ```
 
@@ -47,7 +47,7 @@ despliegue.
 npm install
 npm run dev                      # http://localhost:8080
 XHOCK_STATUS=open npm run dev    # fuerza "venta abierta" para probar el formulario
-npm run build                    # genera _site/ (lo que publica Cloudflare Pages)
+npm run build                    # genera _site/ (lo que publica Cloudflare)
 ```
 
 El estado real de la venta (`open` / `soon` / `closed`) está en `src/_data/cms/event.json`.
