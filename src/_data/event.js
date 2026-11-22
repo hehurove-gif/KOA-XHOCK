@@ -41,6 +41,16 @@ export default {
   dateFromTo,
   dateThrough,
   priceLabel: `$${raw.price}`,
+  // Campos de tarifas que lee el navegador (data-pricing) para calcular el mismo total que el servidor.
+  pricingInput: {
+    price: raw.price, currency: raw.currency, childPrice: raw.childPrice, childMaxAge: raw.childMaxAge,
+    earlyBirdUntil: raw.earlyBirdUntil, earlyBirdPrice: raw.earlyBirdPrice, earlyBirdChildPrice: raw.earlyBirdChildPrice
+  },
+  hasChildPrice: Number(raw.childMaxAge) > 0 && raw.childPrice !== '' && raw.childPrice != null,
+  childPriceLabel: raw.childPrice !== '' && raw.childPrice != null ? `$${raw.childPrice}` : '',
+  childMaxAge: Number(raw.childMaxAge) || 0,
+  earlyBirdLabel: raw.earlyBirdPrice !== '' && raw.earlyBirdPrice != null ? `$${raw.earlyBirdPrice}` : '',
+  earlyBirdUntilLabel: raw.earlyBirdUntil ? (({ month, day }) => `${MONTHS[month]} ${day}`)(parts(raw.earlyBirdUntil)) : '',
   noticeTitle: status === 'soon' ? raw.soonTitle : raw.closedTitle,
   noticeText: status === 'soon' ? raw.soonText : raw.closedText
 };

@@ -43,8 +43,8 @@ export async function insertOrder(db, order, players) {
       Object.keys(order.attribution).length ? JSON.stringify(order.attribution) : null, order.ipHash
     ),
     ...players.map((p, i) =>
-      db.prepare('INSERT INTO players (order_id, position_no, name, age, position, jersey_size) VALUES (?1, ?2, ?3, ?4, ?5, ?6)')
-        .bind(order.id, i + 1, p.name, p.age, p.position, p.jerseySize)
+      db.prepare('INSERT INTO players (order_id, position_no, name, age, position, jersey_size, unit_amount, price_tier) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)')
+        .bind(order.id, i + 1, p.name, p.age, p.position, p.jerseySize, p.amount ?? null, p.tier ?? null)
     )
   ];
   await db.batch(statements);
@@ -63,6 +63,6 @@ export async function markFailed(db, orderId, note) {
 export async function getOrderWithPlayers(db, orderId) {
   const order = await db.prepare('SELECT * FROM orders WHERE id = ?1').bind(orderId).first();
   if (!order) return null;
-  const { results } = await db.prepare('SELECT position_no, name, age, position, jersey_size, team FROM players WHERE order_id = ?1 ORDER BY position_no').bind(orderId).all();
+  const { results } = await db.prepare('SELECT position_no, name, age, position, jersey_size, team, unit_amount FROM players WHERE order_id = ?1 ORDER BY position_no').bind(orderId).all();
   return { ...order, players: results };
 }

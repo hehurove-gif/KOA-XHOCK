@@ -56,9 +56,9 @@ content:
     label: País (código de 2 letras, por ejemplo MX)
     type: string
   - name: price
-    label: Precio por boleto (solo se muestra en el sitio)
+    label: Precio por boleto (adulto / precio normal)
     type: number
-    description: 'OJO: el cobro real lo define Stripe. Si cambias este número, cambia también el precio en Stripe.'
+    description: 'Es el precio que se cobra: el servidor lo lee de aquí (no hay que cambiarlo en Stripe).'
   - name: currency
     label: Moneda
     type: select
@@ -70,6 +70,21 @@ content:
         label: MXN
       - name: CAD
         label: CAD
+  - name: childPrice
+    label: Precio junior (opcional; vacío = mismo precio para todos)
+    type: number
+  - name: childMaxAge
+    label: Edad máxima para tarifa junior (por ejemplo 12; vacío = sin tarifa junior)
+    type: number
+  - name: earlyBirdUntil
+    label: Preventa válida hasta (fecha inclusive, hora de Cancún; vacío = sin preventa)
+    type: date
+  - name: earlyBirdPrice
+    label: Precio preventa adulto
+    type: number
+  - name: earlyBirdChildPrice
+    label: Precio preventa junior (vacío = precio junior normal)
+    type: number
   - name: closedTitle
     label: Aviso cuando la venta está CERRADA — título
     type: string

@@ -84,6 +84,12 @@ permalink: tickets.html
           <strong>{{ event.priceLabel }}</strong>
           <span>{{ event.currency }} <em>per player</em></span>
         </div>
+        {%- if event.hasChildPrice or event.earlyBirdLabel %}
+        <ul class="ticket-summary__tiers">
+          {%- if event.hasChildPrice %}<li>Junior (age {{ event.childMaxAge }} and under): <strong>{{ event.childPriceLabel }}</strong></li>{% endif %}
+          {%- if event.earlyBirdLabel and event.earlyBirdUntilLabel %}<li>Early bird until {{ event.earlyBirdUntilLabel }}: <strong>{{ event.earlyBirdLabel }}</strong></li>{% endif %}
+        </ul>
+        {%- endif %}
 
         <a class="ticket-summary__jump" href="#ticketFormTitle">
           Fill in my details
@@ -130,7 +136,7 @@ permalink: tickets.html
           </div>
         </div>
 
-        <form class="ticket-modal__form ticket-card__form" id="ticketForm" action="{{ site.checkoutEndpoint }}" method="post" novalidate>
+        <form class="ticket-modal__form ticket-card__form" id="ticketForm" action="{{ site.checkoutEndpoint }}" method="post" data-pricing="{{ event.pricingInput | json }}" novalidate>
           <div class="ticket-modal__body" id="ticketFormBody">
             <div class="tm-section-label">Contact Information</div>
             <div class="tm-grid">
@@ -210,6 +216,8 @@ permalink: tickets.html
 
           <div class="ticket-modal__foot ticket-card__foot">
             <p class="tm-error" id="tmError" role="alert" hidden></p>
+            <p class="tm-total" id="tmTotal" aria-live="polite" hidden></p>
+
             {% if site.turnstileSiteKey %}
             <div class="cf-turnstile" data-sitekey="{{ site.turnstileSiteKey }}" data-theme="dark" data-language="en"></div>
             {% endif %}

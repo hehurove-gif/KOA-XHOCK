@@ -497,7 +497,42 @@
     if (ticketQty.value !== String(quantity)) ticketQty.value = String(quantity);
     updateStepperState();
     if (rerender && quantity !== renderedQuantity) renderPlayerFields(quantity);
-    if (rerender) queueDraftSave();
+    if (rerender) { queueDraftSave(); window.setTimeout(() => { if (typeof updateTotal === 'function') updateTotal(); }, 0); }
+  }
+
+  /* ----- Total del pedido (mismo cálculo que el servidor: assets/js/pricing.js) ----- */
+  const totalBox = $('#tmTotal');
+  let pricingModule = null;
+  let pricingConfig = null;
+  try { pricingConfig = JSON.parse(ticketForm?.dataset.pricing || 'null'); } catch (e) { pricingConfig = null; }
+
+  function formatMoney(cents, currency) {
+    try { return new Intl.NumberFormat('en-US', { style: 'currency', currency: currency.toUpperCase() }).format(cents / 100); }
+    catch (e) { return (cents / 100).toFixed(2) + ' ' + currency.toUpperCase(); }
+  }
+
+  function updateTotal() {
+    if (!totalBox || !pricingModule || !pricingConfig || !ticketForm) return;
+    const pricing = pricingModule.buildPricing(pricingConfig);
+    const ages = $$('[data-player-field="age"]', ticketForm).map(input => Number.parseInt(input.value, 10));
+    const count = Math.max(1, ages.length);
+    const players = Array.from({ length: count }, (_, i) => ({ age: Number.isFinite(ages[i]) ? ages[i] : NaN }));
+    // Con edad aún sin escribir se muestra el precio de adulto, como estimación.
+    const order = pricingModule.priceOrder(players.map(p => ({ age: Number.isFinite(p.age) ? p.age : 999 })), pricing);
+    const mixed = order.lines.length > 1 || order.lines[0].tier !== 'adult';
+    const detail = mixed
+      ? order.lines.map(l => l.quantity + ' × ' + formatMoney(l.unitAmount, pricing.currency) + ' (' + pricingModule.TIER_LABELS[l.tier].replace('Player Ticket — ', '').toLowerCase() + ')').join(' + ')
+      : '';
+    totalBox.textContent = '';
+    totalBox.append('Order total: ' + formatMoney(order.total, pricing.currency));
+    if (detail) { const small = document.createElement('small'); small.textContent = detail; totalBox.appendChild(small); }
+    totalBox.hidden = false;
+  }
+
+  if (totalBox && pricingConfig) {
+    import('./pricing.js').then(module => { pricingModule = module; updateTotal(); }).catch(() => { /* sin total en vivo; el servidor cobra igual */ });
+    ticketForm.addEventListener('input', updateTotal);
+    ticketForm.addEventListener('change', updateTotal);
   }
 
   if (ticketQty && playersContainer) {

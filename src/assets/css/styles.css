@@ -1854,3 +1854,10 @@ section[id]{scroll-margin-top:96px}
 /* Botón con aspecto de enlace (Cookie settings en el pie) */
 .link-btn{background:none;border:0;padding:0;color:inherit;font:inherit;text-decoration:underline;cursor:pointer}
 .link-btn:focus-visible{outline:3px solid var(--color-primary);outline-offset:2px}
+
+/* Tarifas y total del pedido */
+.ticket-summary__tiers{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:4px;font-size:.9rem;color:rgba(255,255,255,.82)}
+.ticket-summary__tiers strong{color:var(--color-primary)}
+.tm-total{margin:0 0 12px;padding:12px 14px;border-radius:14px;border:1px solid rgba(235,226,102,.4);font-weight:800;line-height:1.5}
+.tm-total[hidden]{display:none}
+.tm-total small{display:block;font-weight:500;opacity:.8}

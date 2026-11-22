@@ -428,3 +428,53 @@ test('admin: asignar equipo a jugadores y filtrar por equipo', async () => {
 test('summarize: lista vacía no falla', () => {
   assert.equal(summarize([]).orders, 0);
 });
+
+// ------------------------------------------------------------------ Tarifas por categoría
+const TIERS = JSON.stringify({ childPrice: 100, childMaxAge: 12, earlyBirdUntil: '2999-12-31', earlyBirdPrice: 150, earlyBirdChildPrice: 80 });
+
+test('tarifas: el servidor cobra por edad y preventa, con una línea de Stripe por categoría', async () => {
+  const e = { ...env, EVENT_OVERRIDES: TIERS };
+  const players = [{ name: 'Madre', age: '40', position: 'Center', jerseySize: 'M' }, { name: 'Hijo', age: '9', position: 'Goalie', jerseySize: 'XS' }];
+  const response = await post(goodEntries({ quantity: '2' }, players), {}, e);
+  assert.equal(response.status, 200, await response.clone().text());
+
+  const form = stripeCalls[0].form;
+  const lines = [0, 1].map(i => [form.get(`line_items[${i}][quantity]`), form.get(`line_items[${i}][price_data][unit_amount]`), form.get(`line_items[${i}][price_data][product_data][name]`)]);
+  assert.deepEqual(lines.map(l => l.slice(0, 2).join('x')).sort(), ['1x15000', '1x8000']);
+  assert.ok(lines.some(l => /Early bird/.test(l[2])) && lines.some(l => /Junior/.test(l[2])));
+
+  const order = await db.prepare('SELECT * FROM orders').first();
+  assert.equal(order.amount_total, 23000);
+  const rows = (await db.prepare('SELECT age, unit_amount, price_tier FROM players ORDER BY position_no').all()).results;
+  assert.deepEqual(rows.map(r => [r.age, r.unit_amount, r.price_tier]), [[40, 15000, 'early_adult'], [9, 8000, 'early_child']]);
+});
+
+test('tarifas: preventa vencida vuelve al precio normal y el webhook acepta el total mixto', async () => {
+  const e = { ...env, EVENT_OVERRIDES: JSON.stringify({ childPrice: 100, childMaxAge: 12, earlyBirdUntil: '2000-01-01', earlyBirdPrice: 150 }) };
+  const players = [{ name: 'Madre', age: '40', position: 'Center', jerseySize: 'M' }, { name: 'Hijo', age: '9', position: 'Goalie', jerseySize: 'XS' }];
+  const response = await post(goodEntries({ quantity: '2' }, players), {}, e);
+  assert.equal(response.status, 200);
+  const order = await db.prepare('SELECT * FROM orders').first();
+  assert.equal(order.amount_total, 17500 + 10000);
+
+  const { data } = await sendWebhook('checkout.session.completed', sessionOf(order), { e });
+  assert.equal(data.received, true);
+  assert.equal((await db.prepare('SELECT status FROM orders').first()).status, 'paid');
+  const csv = await (await admin({ request: adminRequest('?format=csv'), env })).text();
+  assert.match(csv, /player_price,price_tier/);
+  assert.ok(csv.includes('100.00,child'));
+});
+
+test('tarifas: el navegador no puede imponer precios ni categorías', async () => {
+  const e = { ...env, EVENT_OVERRIDES: TIERS };
+  const response = await post([...goodEntries(), ['unit_amount', '1'], ['amount_total', '1'], ['price_tier', 'child'], ['players[0][price]', '1']], {}, e);
+  assert.equal(response.status, 200);
+  const order = await db.prepare('SELECT * FROM orders').first();
+  assert.equal(order.amount_total, 15000 + 8000, 'edades 34 y 12 → preventa adulto + preventa junior; ignora lo que mande el navegador');
+});
+
+test('EVENT_OVERRIDES inválido o con claves no permitidas se ignora', async () => {
+  const bad = await post(goodEntries(), {}, { ...env, EVENT_OVERRIDES: 'no-es-json' });
+  assert.equal(bad.status, 200);
+  assert.equal((await db.prepare('SELECT amount_total FROM orders').first()).amount_total, 35000);
+});

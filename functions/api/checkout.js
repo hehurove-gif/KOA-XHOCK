@@ -6,6 +6,7 @@ import { json, methodNotAllowed, clientIp, sha256Hex } from '../_lib/http.js';
 import { isRateLimited, purgeOldRateLimits, findRecentPendingOrder, insertOrder, attachSession, markFailed } from '../_lib/db.js';
 import { createCheckoutSession } from '../_lib/stripe.js';
 import { verifyTurnstile } from '../_lib/turnstile.js';
+import { priceOrder } from '../_lib/pricing.js';
 
 const IP_LIMIT = 30;     // peticiones por IP y ventana (varias personas pueden compartir red)
 const EMAIL_LIMIT = 5;   // intentos por correo y ventana
@@ -78,15 +79,19 @@ export async function onRequestPost({ request, env }) {
   if (Math.random() < 0.02) await purgeOldRateLimits(env.DB).catch(() => {});
 
   // Reintento idéntico: mismo enlace de pago, sin crear otro pedido.
-  const payloadHash = await sha256Hex(JSON.stringify([value.email, value.firstName, value.lastName, value.phone, value.country, value.quantity, value.players]));
+  // El servidor calcula el precio de cada jugador (edad, preventa); el navegador nunca manda importes.
+  const priced = priceOrder(value.players, config.pricing);
+  const payloadHash = await sha256Hex(JSON.stringify([value.email, value.firstName, value.lastName, value.phone, value.country, value.quantity, value.players, priced.total]));
   const existing = await findRecentPendingOrder(env.DB, payloadHash);
   if (existing) return json(200, { url: existing.checkout_url });
 
   const order = {
     id: crypto.randomUUID(),
     ...value,
-    unitAmount: config.unitAmount,
-    amountTotal: config.unitAmount * value.quantity, // el servidor calcula el importe, siempre
+    players: priced.players,
+    lines: priced.lines,
+    unitAmount: config.pricing.adult,
+    amountTotal: priced.total,
     currency: config.currency,
     payloadHash,
     termsVersion: config.termsVersion,
@@ -94,7 +99,7 @@ export async function onRequestPost({ request, env }) {
   };
 
   try {
-    await insertOrder(env.DB, order, value.players);
+    await insertOrder(env.DB, order, priced.players);
   } catch (error) {
     console.error('checkout: insert failed', error?.message);
     return json(500, { error: 'We could not save your registration. Please try again.' });

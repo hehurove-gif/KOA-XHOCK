@@ -28,6 +28,8 @@ export default function (eleventyConfig) {
     'node_modules/intl-tel-input/build/js/utils.js': 'assets/vendor/intl-tel-input/js/utils.js',
     'node_modules/intl-tel-input/build/img': 'assets/vendor/intl-tel-input/img'
   });
+  // Mismo cálculo de precios que usa el servidor: el formulario muestra el total exacto.
+  eleventyConfig.addPassthroughCopy({ 'functions/_lib/pricing.js': 'assets/js/pricing.js' });
   eleventyConfig.addPassthroughCopy('src/robots.txt');
   eleventyConfig.addPassthroughCopy('src/_headers');
 

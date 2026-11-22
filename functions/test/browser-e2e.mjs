@@ -36,7 +36,8 @@ try {
   // 2. Compra válida de 2 boletos
   await page.fill('#tmFirstName', 'María');
   await page.fill('#tmLastName', 'González');
-  await page.fill('#tmEmail', `maria.${Date.now()}@example.com`);
+  const email = `maria.${Date.now()}@example.com`;
+  await page.fill('#tmEmail', email);
   await page.fill('#tmPhone', '55 1234 5678');
   await page.selectOption('#tmCountry', 'Mexico');
   await page.click('[data-qty-step="1"]');
@@ -68,7 +69,7 @@ try {
 
   await page.goto(`${base}/admin/`);
   await page.fill('#adm-token', ADMIN_TOKEN);
-  await page.fill('#adm-q', 'González');
+  await page.fill('#adm-q', email);
   await page.click('#adm-form button[type=submit]');
   await page.waitForSelector('#adm-table tbody tr');
   assert.equal(await page.locator('#adm-table tbody tr').count(), 2);

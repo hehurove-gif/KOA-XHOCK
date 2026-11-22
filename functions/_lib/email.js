@@ -22,15 +22,15 @@ function money(amount, currency) {
 
 function playersHtml(order) {
   const rows = order.players.map(p =>
-    `<tr><td>${p.position_no}</td><td>${escapeHtml(p.name)}</td><td>${p.age}</td><td>${escapeHtml(p.position)}</td><td>${escapeHtml(p.jersey_size)}</td></tr>`
+    `<tr><td>${p.position_no}</td><td>${escapeHtml(p.name)}</td><td>${p.age}</td><td>${escapeHtml(p.position)}</td><td>${escapeHtml(p.jersey_size)}</td><td>${p.unit_amount == null ? '' : escapeHtml(money(p.unit_amount, order.currency))}</td></tr>`
   ).join('');
-  return `<table cellpadding="6" border="1" style="border-collapse:collapse"><tr><th>#</th><th>Name</th><th>Age</th><th>Position</th><th>Jersey</th></tr>${rows}</table>`;
+  return `<table cellpadding="6" border="1" style="border-collapse:collapse"><tr><th>#</th><th>Name</th><th>Age</th><th>Position</th><th>Jersey</th><th>Price</th></tr>${rows}</table>`;
 }
 
 // Nunca lanza: un fallo de correo no debe hacer fallar el webhook (Stripe reintentaría).
 export async function sendPaidEmails(env, config, order) {
   if (!emailEnabled(env)) return;
-  const summary = `<p>${escapeHtml(config.eventName)} · ${escapeHtml(config.venue)}<br>${order.quantity} × Player Ticket — ${escapeHtml(money(order.amount_total, order.currency))}</p>${playersHtml(order)}`;
+  const summary = `<p>${escapeHtml(config.eventName)} · ${escapeHtml(config.venue)}<br>${order.quantity} player ticket${order.quantity > 1 ? 's' : ''} — total ${escapeHtml(money(order.amount_total, order.currency))}</p>${playersHtml(order)}`;
   const jobs = [
     send(env, {
       to: order.email,

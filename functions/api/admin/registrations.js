@@ -60,7 +60,7 @@ const CSV_COLUMNS = [
   ['buyer_phone', r => r.phone], ['buyer_country', r => r.country], ['tickets_in_order', r => r.quantity],
   ['order_amount', r => (r.amount_total / 100).toFixed(2)], ['currency', r => String(r.currency).toUpperCase()],
   ['player_id', r => r.player_id], ['player_no', r => r.position_no], ['player_name', r => r.player_name], ['player_age', r => r.age],
-  ['player_position', r => r.position], ['jersey_size', r => r.jersey_size], ['team', r => r.team],
+  ['player_position', r => r.position], ['jersey_size', r => r.jersey_size], ['player_price', r => (r.unit_amount == null ? '' : (r.unit_amount / 100).toFixed(2))], ['price_tier', r => r.price_tier], ['team', r => r.team],
   ['utm_source', r => r.utm_source], ['utm_medium', r => r.utm_medium], ['utm_campaign', r => r.utm_campaign]
 ];
 
@@ -107,7 +107,7 @@ export async function onRequestGet({ request, env }) {
   const statement = env.DB.prepare(
     `SELECT o.id AS order_id, o.status, o.created_at, o.paid_at, o.first_name, o.last_name, o.email, o.phone, o.country,
             o.quantity, o.amount_total, o.currency, o.attribution,
-            p.id AS player_id, p.position_no, p.name AS player_name, p.age, p.position, p.jersey_size, p.team
+            p.id AS player_id, p.position_no, p.name AS player_name, p.age, p.position, p.jersey_size, p.team, p.unit_amount, p.price_tier
      FROM orders o JOIN players p ON p.order_id = o.id
      ${where}
      ORDER BY o.created_at DESC, p.position_no

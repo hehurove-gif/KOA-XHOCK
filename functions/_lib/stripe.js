@@ -1,5 +1,6 @@
 // Cliente mínimo de Stripe sobre fetch (sin SDK: arranca más rápido en Workers).
 import { timingSafeEqual } from './http.js';
+import { TIER_LABELS } from './pricing.js';
 
 const encoder = new TextEncoder();
 
@@ -17,11 +18,14 @@ export async function createCheckoutSession(env, { order, config, successUrl, ca
   body.set('expires_at', String(Math.floor(Date.now() / 1000) + 60 * 60));
   body.set('metadata[order_id]', order.id);
   body.set('payment_intent_data[metadata][order_id]', order.id);
-  body.set('line_items[0][quantity]', String(order.quantity));
-  body.set('line_items[0][price_data][currency]', config.currency);
-  body.set('line_items[0][price_data][unit_amount]', String(config.unitAmount));
-  body.set('line_items[0][price_data][product_data][name]', `${config.eventName} — Player Ticket`);
-  body.set('line_items[0][price_data][product_data][description]', description);
+  // Una línea por categoría de precio (adulto, junior, preventa...).
+  order.lines.forEach((line, i) => {
+    body.set(`line_items[${i}][quantity]`, String(line.quantity));
+    body.set(`line_items[${i}][price_data][currency]`, config.currency);
+    body.set(`line_items[${i}][price_data][unit_amount]`, String(line.unitAmount));
+    body.set(`line_items[${i}][price_data][product_data][name]`, `${config.eventName} — ${TIER_LABELS[line.tier] || 'Player Ticket'}`);
+    body.set(`line_items[${i}][price_data][product_data][description]`, description);
+  });
 
   const response = await fetch(`${apiBase(env)}/v1/checkout/sessions`, {
     method: 'POST',

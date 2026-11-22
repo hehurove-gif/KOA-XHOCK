@@ -38,6 +38,18 @@ Probado: `npm test` (32 pruebas + proxy) y `npm run test:e2e` (workerd real, D1 
 4. Reembolsar desde Stripe → el pedido pasa a `refunded`.
 5. Cambiar a llaves `sk_live_` + webhook live, y hacer una compra real mínima con reembolso.
 
+## Tarifas por categoría (junior, preventa)
+
+Todo se edita en Pages CMS → Evento (campos vacíos = sin esa tarifa; con solo `price` rige un precio único):
+- `price`: precio adulto / normal. `childPrice` + `childMaxAge`: tarifa junior para jugadores de esa edad o menos.
+- `earlyBirdUntil` (fecha inclusive, hora de Cancún), `earlyBirdPrice` y `earlyBirdChildPrice`: preventa.
+El servidor calcula el precio de **cada jugador** según su edad y la fecha (`functions/_lib/pricing.js`); el formulario usa
+el mismo archivo para mostrar el total exacto. Stripe recibe una línea por categoría; cada jugador guarda lo cobrado
+(`players.unit_amount`, `price_tier`; también salen en el CSV). **Aplicar la migración `0002_pricing.sql`**
+(`npm run db:migrate:remote`) antes de abrir una edición con esta versión. Para mover la fecha de preventa sin
+redeploy: secret `EVENT_OVERRIDES` = `{"earlyBirdUntil":"2027-01-31"}` (solo admite claves de precio).
+Los pedidos de ediciones anteriores no tienen estos datos (quedan vacíos).
+
 ## Nueva edición del evento
 
 Pages CMS → Evento: nombre, fechas, sede, precio, moneda y estado (`soon` / `open` / `closed`). El precio que se
