@@ -5,6 +5,7 @@ import { parseForm, validateCheckout, firstErrorMessage } from '../_lib/validate
 import { json, methodNotAllowed, clientIp, sha256Hex } from '../_lib/http.js';
 import { isRateLimited, purgeOldRateLimits, findRecentPendingOrder, insertOrder, attachSession, markFailed } from '../_lib/db.js';
 import { createCheckoutSession } from '../_lib/stripe.js';
+import { verifyTurnstile } from '../_lib/turnstile.js';
 
 const IP_LIMIT = 30;     // peticiones por IP y ventana (varias personas pueden compartir red)
 const EMAIL_LIMIT = 5;   // intentos por correo y ventana
@@ -52,6 +53,13 @@ export async function onRequestPost({ request, env }) {
 
   // Honeypot: un humano nunca llena este campo oculto. Respuesta genérica, sin procesar nada.
   if (String(body.input.company || '').trim() !== '') return json(200, { ok: true });
+
+  // Captcha (solo si TURNSTILE_SECRET está configurado). Se comprueba antes de validar y de tocar la base de datos.
+  const captcha = await verifyTurnstile(env, body.input['cf-turnstile-response'], clientIp(request, env));
+  if (!captcha.ok) {
+    if (captcha.reason === 'unavailable') return json(503, { error: 'Security check unavailable. Please try again in a moment.', reason: 'captcha_unavailable' });
+    return json(400, { error: 'Please complete the security check and try again.', reason: 'captcha' });
+  }
 
   const { errors, value } = validateCheckout(body.input);
   if (Object.keys(errors).length) {

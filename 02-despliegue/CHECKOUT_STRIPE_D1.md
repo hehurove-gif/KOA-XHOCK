@@ -24,7 +24,11 @@ Probado: `npm test` (32 pruebas + proxy) y `npm run test:e2e` (workerd real, D1 
    Requiere que el DNS de koa-hub.com esté proxied (nube naranja) en Cloudflare.
 6. **Proteger el panel**: Cloudflare Zero Trust → Access → aplicación para `koa-hub.com/tickets/admin*` y
    `koa-hub.com/tickets/api/admin*` (correo de KOA). Además el endpoint exige `Authorization: Bearer <ADMIN_TOKEN>`.
-7. **Legal**: revisar `terms.njk`/`privacy.njk` con KOA (retención de datos, entidad responsable).
+7. **Turnstile (captcha, recomendado)**: Cloudflare → Turnstile → Add widget (dominio `koa-hub.com`, modo Managed).
+   Pegar la *Site Key* en Pages CMS → Ajustes (`turnstileSiteKey`) y guardar la *Secret Key* como secret `TURNSTILE_SECRET`
+   del Worker. Sin secret el checkout no exige captcha; con secret, rechaza peticiones sin token válido (400) y falla
+   cerrado (503) si Cloudflare no responde.
+8. **Legal**: revisar `terms.njk`/`privacy.njk` con KOA (retención de datos, entidad responsable).
 
 ## Prueba antes de abrir ventas
 

@@ -370,6 +370,9 @@ content:
   - name: metaPixelId
     label: Meta Pixel (ID)
     type: string
+  - name: turnstileSiteKey
+    label: Cloudflare Turnstile (Site Key pública; vacío = sin captcha)
+    type: string
   - name: analyticsConsent
     label: Consentimiento de analítica (banner = pide permiso antes de cargar GTM/Pixel; auto = carga tras la primera interacción)
     type: select

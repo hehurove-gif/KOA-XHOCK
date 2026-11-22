@@ -210,6 +210,10 @@ permalink: tickets.html
 
           <div class="ticket-modal__foot ticket-card__foot">
             <p class="tm-error" id="tmError" role="alert" hidden></p>
+            {% if site.turnstileSiteKey %}
+            <div class="cf-turnstile" data-sitekey="{{ site.turnstileSiteKey }}" data-theme="dark" data-language="en"></div>
+            {% endif %}
+
             <button class="btn btn--primary btn--full magnetic" type="submit">
               <span class="tm-submit__label">Continue to Payment</span>
               <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
@@ -246,6 +250,7 @@ permalink: tickets.html
     </div>
   </footer>
 
+{% set loadTurnstile = true %}
 {% include "scripts.njk" %}
 </body>
 </html>

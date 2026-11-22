@@ -321,3 +321,49 @@ test('csvCell neutraliza fórmulas y escapa comillas', () => {
   assert.equal(csvCell(null), '');
   assert.equal(csvCell(34), '34');
 });
+
+// ------------------------------------------------------------------ Turnstile
+test('Turnstile: sin secret configurado no se exige token (el sitio sigue funcionando)', async () => {
+  const response = await post(goodEntries());
+  assert.equal(response.status, 200);
+});
+
+test('Turnstile: con secret, exige token, lo verifica y no crea pedidos si falla', async () => {
+  const calls = [];
+  const verifier = await listen((req, res) => {
+    let body = '';
+    req.on('data', c => (body += c));
+    req.on('end', () => {
+      const text = body.toString();
+      calls.push(text);
+      const ok = text.includes('token-bueno');
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(ok ? { success: true } : { success: false, 'error-codes': ['invalid-input-response'] }));
+    });
+  });
+  const e = { ...env, TURNSTILE_SECRET: 'secret-ts', TURNSTILE_API_BASE: urlOf(verifier) };
+  try {
+    let response = await post(goodEntries(), {}, e);
+    assert.equal(response.status, 400);
+    assert.equal((await response.json()).reason, 'captcha');
+
+    response = await post([...goodEntries(), ['cf-turnstile-response', 'token-malo']], {}, e);
+    assert.equal(response.status, 400);
+    assert.equal(await count('orders'), 0);
+
+    response = await post([...goodEntries(), ['cf-turnstile-response', 'token-bueno']], {}, e);
+    assert.equal(response.status, 200);
+    assert.equal(await count('orders'), 1);
+    assert.ok(calls.some(c => c.includes('secret-ts') && c.includes('203.0.113.7')), 'se envía secret e IP del cliente');
+  } finally {
+    verifier.close();
+  }
+});
+
+test('Turnstile: si Cloudflare no responde, falla cerrado con 503', async () => {
+  const e = { ...env, TURNSTILE_SECRET: 'secret-ts', TURNSTILE_API_BASE: 'http://127.0.0.1:9' };
+  const response = await post([...goodEntries(), ['cf-turnstile-response', 'x']], {}, e);
+  assert.equal(response.status, 503);
+  assert.equal((await response.json()).reason, 'captcha_unavailable');
+  assert.equal(await count('orders'), 0);
+});

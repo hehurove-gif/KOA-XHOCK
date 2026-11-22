@@ -1004,6 +1004,8 @@
         }
       } catch (error) {
         setSubmitting(false);
+        // El token de Turnstile es de un solo uso: se pide uno nuevo tras cualquier fallo.
+        if (window.turnstile && typeof window.turnstile.reset === 'function') window.turnstile.reset();
         if (error.name === 'AbortError') {
           showFormError('The payment provider is taking too long to respond. Please try again.');
         } else {

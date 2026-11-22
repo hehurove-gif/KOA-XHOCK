@@ -14,5 +14,6 @@
   "checkoutEndpoint": "api/checkout",
   "developerName": "Hetor",
   "developerUrl": "",
-  "analyticsConsent": "banner"
+  "analyticsConsent": "banner",
+  "turnstileSiteKey": ""
 }
