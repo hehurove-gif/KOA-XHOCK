@@ -1,0 +1,135 @@
+---
+permalink: admin/index.html
+eleventyExcludeFromCollections: true
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Registrations — XHOCK admin</title>
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+  <style>
+    .adm{max-width:1240px;margin:0 auto;padding:32px 16px 80px}
+    .adm h1{font-size:1.5rem;margin:0 0 6px}
+    .adm__bar{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin:18px 0}
+    .adm label{display:grid;gap:4px;font-size:.8rem;color:rgba(255,255,255,.7)}
+    .adm input,.adm select{background:#111;color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:8px;padding:10px 12px;min-width:220px;font:inherit}
+    .adm button{cursor:pointer;border:0;border-radius:8px;padding:11px 16px;font-weight:800;background:var(--color-primary,#ebe266);color:#111}
+    .adm button.is-secondary{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.3)}
+    .adm__summary{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 16px}
+    .adm__chip{padding:4px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.25);font-size:.8rem}
+    .adm__wrap{overflow:auto;border:1px solid rgba(255,255,255,.15);border-radius:10px}
+    .adm table{border-collapse:collapse;width:100%;font-size:.85rem}
+    .adm th,.adm td{padding:8px 10px;text-align:left;border-bottom:1px solid rgba(255,255,255,.1);white-space:nowrap}
+    .adm th{position:sticky;top:0;background:#181818}
+    .adm__error{color:#ff8d8d;min-height:1.4em}
+    .adm__note{color:rgba(255,255,255,.6);font-size:.8rem;max-width:70ch}
+  </style>
+</head>
+<body class="ticket-page">
+  <main class="adm">
+    <h1>XHOCK registrations</h1>
+    <p class="adm__note">Private page. The token is only kept in this tab's memory and is sent to the API; it is never stored. Team assignment is done in the Cloudflare D1 console (table <code>players</code>, column <code>team</code>).</p>
+    <form class="adm__bar" id="adm-form">
+      <label>Admin token<input id="adm-token" type="password" autocomplete="off" required /></label>
+      <label>Status
+        <select id="adm-status">
+          <option value="paid">Paid</option>
+          <option value="">All</option>
+          <option value="awaiting_payment">Awaiting payment (OXXO / SPEI)</option>
+          <option value="pending">Pending</option>
+          <option value="review">Needs review</option>
+          <option value="failed">Failed</option>
+          <option value="expired">Expired</option>
+          <option value="refunded">Refunded</option>
+        </select>
+      </label>
+      <button type="submit">Load</button>
+      <button type="button" class="is-secondary" id="adm-csv">Download CSV</button>
+    </form>
+    <p class="adm__error" id="adm-error" role="alert"></p>
+    <div class="adm__summary" id="adm-summary"></div>
+    <div class="adm__wrap"><table id="adm-table"><thead></thead><tbody></tbody></table></div>
+  </main>
+  <script>
+    (function () {
+      var API = '../api/admin/registrations';
+      var form = document.getElementById('adm-form');
+      var tokenInput = document.getElementById('adm-token');
+      var statusSelect = document.getElementById('adm-status');
+      var errorBox = document.getElementById('adm-error');
+      var COLS = [
+        ['status', 'Status'], ['created_at', 'Created'], ['paid_at', 'Paid'], ['first_name', 'Buyer'], ['email', 'Email'],
+        ['phone', 'Phone'], ['country', 'Country'], ['position_no', '#'], ['player_name', 'Player'], ['age', 'Age'],
+        ['position', 'Position'], ['jersey_size', 'Jersey'], ['team', 'Team']
+      ];
+
+      function url(format) {
+        var q = [];
+        if (statusSelect.value) q.push('status=' + encodeURIComponent(statusSelect.value));
+        if (format) q.push('format=' + format);
+        return API + (q.length ? '?' + q.join('&') : '');
+      }
+      function call(format) {
+        return fetch(url(format), { headers: { Authorization: 'Bearer ' + tokenInput.value.trim() }, cache: 'no-store' });
+      }
+      function fail(response) {
+        errorBox.textContent = response.status === 401 ? 'Wrong token.'
+          : response.status === 503 ? 'Admin access is not configured on the server.'
+          : 'Something went wrong (' + response.status + ').';
+      }
+      function cell(text) { var td = document.createElement('td'); td.textContent = text == null ? '' : String(text); return td; }
+
+      function render(data) {
+        var head = document.querySelector('#adm-table thead');
+        var body = document.querySelector('#adm-table tbody');
+        head.textContent = ''; body.textContent = '';
+        var tr = document.createElement('tr');
+        COLS.forEach(function (c) { var th = document.createElement('th'); th.textContent = c[1]; tr.appendChild(th); });
+        head.appendChild(tr);
+        var orders = {}, byStatus = {};
+        data.rows.forEach(function (row) {
+          if (!orders[row.order_id]) { orders[row.order_id] = true; byStatus[row.status] = (byStatus[row.status] || 0) + 1; }
+          var r = document.createElement('tr');
+          COLS.forEach(function (c) {
+            var v = row[c[0]];
+            if (c[0] === 'first_name') v = row.first_name + ' ' + row.last_name;
+            r.appendChild(cell(v));
+          });
+          body.appendChild(r);
+        });
+        var summary = document.getElementById('adm-summary');
+        summary.textContent = '';
+        var chips = [data.rows.length + ' players', Object.keys(orders).length + ' orders'];
+        Object.keys(byStatus).forEach(function (s) { chips.push(s + ': ' + byStatus[s]); });
+        if (data.truncated) chips.push('list truncated');
+        chips.forEach(function (t) { var s = document.createElement('span'); s.className = 'adm__chip'; s.textContent = t; summary.appendChild(s); });
+      }
+
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        errorBox.textContent = '';
+        call().then(function (r) { return r.ok ? r.json().then(render) : fail(r); })
+              .catch(function () { errorBox.textContent = 'Network error.'; });
+      });
+
+      document.getElementById('adm-csv').addEventListener('click', function () {
+        errorBox.textContent = '';
+        if (!tokenInput.value.trim()) { errorBox.textContent = 'Enter the token first.'; return; }
+        call('csv').then(function (r) {
+          if (!r.ok) return fail(r);
+          return r.blob().then(function (blob) {
+            var a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'xhock-registrations' + (statusSelect.value ? '-' + statusSelect.value : '') + '.csv';
+            document.body.appendChild(a); a.click(); a.remove();
+            setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+          });
+        }).catch(function () { errorBox.textContent = 'Network error.'; });
+      });
+    })();
+  </script>
+</body>
+</html>

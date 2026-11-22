@@ -1,0 +1,59 @@
+---
+permalink: success.html
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>document.documentElement.classList.add('js');window.dataLayer=window.dataLayer||[];</script>
+{%- set pageTitle = "Registration received | XHOCK by KOA" -%}
+{%- set pageDescription = "Your XHOCK registration was received." -%}
+{%- set pagePath = "success.html" -%}
+{%- set noindex = true -%}
+{% include "seo.njk" %}
+  <link rel="preload" href="assets/fonts/Orbitron-variable-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/fonts/Manrope-variable-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body class="ticket-page">
+{% include "noscript-analytics.njk" %}
+  <header class="ticket-header">
+    <div class="container ticket-header__inner">
+      <a class="ticket-header__brand" href="index.html" aria-label="KOA XHOCK home">
+        <img src="assets/logos/Logo-negativo.png" alt="KOA" width="104" height="38" />
+        <span class="koa-tag">XHOCK</span>
+      </a>
+      <a class="ticket-header__back" href="index.html">
+        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5"/><path d="M11 6l-6 6 6 6"/></svg>
+        Back to XHOCK
+      </a>
+    </div>
+  </header>
+
+  <main class="ticket-main" id="main" tabindex="-1">
+    <div class="container ticket-closed">
+      <p class="eyebrow">{{ event.name }}</p>
+      <h1 class="ticket-summary__title">Thank you — your registration was received</h1>
+      <p class="ticket-summary__lead">As soon as your payment is confirmed you will get an email with the details of your registration. If you chose a cash or bank-transfer method, the confirmation arrives once the payment is received.</p>
+      <p class="ticket-summary__lead">Can't find the email? Check your spam folder or write to us on WhatsApp and we'll help right away.</p>
+      <p>
+        <a class="btn btn--primary magnetic" href="{{ site.whatsappUrl('Hi KOA, I just registered for XHOCK and need help.') }}" target="_blank" rel="noreferrer">Chat on WhatsApp</a>
+        <a class="btn btn--ghost magnetic" href="index.html">Back to XHOCK</a>
+      </p>
+    </div>
+  </main>
+
+  <footer class="ticket-footer">
+    <div class="container ticket-footer__inner">
+      <span>© KOA. All rights reserved. · {% include "developed-by.njk" %}</span>
+      <nav aria-label="Footer">
+        <a href="index.html">XHOCK home</a>
+        <a href="terms.html">Terms &amp; Conditions</a>
+        <a href="privacy.html">Privacy Policy</a>
+      </nav>
+    </div>
+  </footer>
+{% include "scripts.njk" %}
+</body>
+</html>
