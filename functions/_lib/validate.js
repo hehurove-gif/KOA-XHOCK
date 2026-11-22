@@ -2,6 +2,8 @@
 import { LIMITS, POSITIONS, JERSEY_SIZES } from './config.js';
 
 const NAME_RE = /^\p{L}[\p{L} '’-]*$/u;
+// Correo: letras/números Unicode y . _ % + ' - en la parte local; sin <>"();,:\\ ni espacios.
+const EMAIL_RE = /^[\p{L}\p{N}._%+'-]{1,64}@(?:[\p{L}\p{N}](?:[\p{L}\p{N}-]{0,61}[\p{L}\p{N}])?\.)+\p{L}{2,}$/u;
 const CONTROL_RE = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g;
 const ATTRIBUTION_KEYS = new Set([
   'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'utm_id',
@@ -41,7 +43,7 @@ export function parseForm(entries) {
       if (!out.players.has(index)) out.players.set(index, {});
       out.players.get(index)[player[2]] = raw;
     } else if (ATTRIBUTION_KEYS.has(key)) {
-      out.attribution[key] = cleanText(raw).slice(0, 300);
+      out.attribution[key] = cleanText(raw).replace(/[<>]/g, '').slice(0, 300);
     } else if (!key.startsWith('players[') && !(key in out)) {
       out[key] = raw;
     }
@@ -66,7 +68,7 @@ export function validateCheckout(input) {
 
   if (!firstName || firstName.length > 50 || !NAME_RE.test(firstName)) errors.firstName = 'Enter a valid first name (letters, spaces, apostrophes and hyphens).';
   if (!lastName || lastName.length > 50 || !NAME_RE.test(lastName)) errors.lastName = 'Enter a valid last name (letters, spaces, apostrophes and hyphens).';
-  if (!email || email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) errors.email = 'Enter a valid email address.';
+  if (!email || email.length > 254 || !EMAIL_RE.test(email)) errors.email = 'Enter a valid email address.';
   const digits = phone.replace(/\D+/g, '');
   if (!/^\+?[0-9() .-]{7,25}$/.test(phone) || digits.length < 7 || digits.length > 15) errors.phone = 'Enter a valid phone number (7 to 15 digits).';
   if (!/^[A-Z]{2}$/.test(country)) errors.country = 'Select your country.';

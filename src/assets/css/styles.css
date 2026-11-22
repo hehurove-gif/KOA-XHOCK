@@ -1861,3 +1861,22 @@ section[id]{scroll-margin-top:96px}
 .tm-total{margin:0 0 12px;padding:12px 14px;border-radius:14px;border:1px solid rgba(235,226,102,.4);font-weight:800;line-height:1.5}
 .tm-total[hidden]{display:none}
 .tm-total small{display:block;font-weight:500;opacity:.8}
+
+/* Pie: "Cookie settings" con el mismo aspecto que los demás enlaces legales, y espacio para que el botón
+   flotante de WhatsApp no tape el crédito "Developed by". */
+.footer .link-btn{display:block;text-decoration:none;color:rgba(255,255,255,.76);margin:10px 0;font-weight:900;transition:color .25s var(--ease),transform .25s var(--ease)}
+.footer .link-btn:hover{color:var(--color-primary);transform:translateX(4px)}
+.footer{padding-bottom:104px}
+.footer__bottom{padding-right:84px}
+@media (max-width:720px){.footer__bottom{padding-right:0}}
+
+/* Pie: "Cookie settings" con el mismo aspecto que los demás enlaces legales */
+.footer__legal .link-btn{
+  display:inline-flex;align-items:center;min-height:44px;margin:0;
+  color:rgba(255,255,255,.76);font-weight:900;font-size:inherit;text-decoration:none;cursor:pointer;
+  transition:color .25s var(--ease),transform .25s var(--ease);
+}
+.footer__legal .link-btn:hover{color:var(--color-primary);transform:translateX(4px)}
+/* El botón flotante de WhatsApp no debe tapar el crédito ni el último renglón del pie */
+.footer{padding-bottom:calc(34px + 84px)}
+@media (max-width:760px){.footer{padding-bottom:calc(34px + 76px)}}

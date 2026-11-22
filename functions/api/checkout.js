@@ -12,30 +12,61 @@ const IP_LIMIT = 30;     // peticiones por IP y ventana (varias personas pueden 
 const EMAIL_LIMIT = 5;   // intentos por correo y ventana
 const WINDOW_SECONDS = 600;
 
-async function readBody(request) {
-  const type = (request.headers.get('Content-Type') || '').split(';')[0].trim().toLowerCase();
-  const length = Number(request.headers.get('Content-Length') || 0);
-  if (length > LIMITS.maxBodyBytes) return { status: 413, error: 'Request body is too large.' };
-
-  if (type === 'multipart/form-data' || type === 'application/x-www-form-urlencoded') {
-    const form = await request.formData().catch(() => null);
-    if (!form) return { status: 400, error: 'Malformed form body.' };
-    return { input: parseForm(form.entries()) };
+// Lee el cuerpo con tope de tamaño aunque no venga Content-Length (transferencia por fragmentos).
+async function readLimited(request, max) {
+  const declared = Number(request.headers.get('Content-Length') || 0);
+  if (declared > max) return null;
+  if (!request.body) return new Uint8Array();
+  const reader = request.body.getReader();
+  const chunks = [];
+  let total = 0;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    total += value.byteLength;
+    if (total > max) { await reader.cancel().catch(() => {}); return null; }
+    chunks.push(value);
   }
+  const bytes = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
+  return bytes;
+}
+
+async function readBody(request) {
+  const contentType = request.headers.get('Content-Type') || '';
+  const type = contentType.split(';')[0].trim().toLowerCase();
+  if (!['multipart/form-data', 'application/x-www-form-urlencoded', 'application/json'].includes(type)) {
+    return { status: 415, error: 'Unsupported content type.' };
+  }
+  const bytes = await readLimited(request, LIMITS.maxBodyBytes);
+  if (bytes === null) return { status: 413, error: 'Request body is too large.' };
+
   if (type === 'application/json') {
-    const text = await request.text();
-    if (text.length > LIMITS.maxBodyBytes) return { status: 413, error: 'Request body is too large.' };
     let data;
-    try { data = JSON.parse(text); } catch { return { status: 400, error: 'Malformed JSON body.' }; }
+    try { data = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes)); } catch { return { status: 400, error: 'Malformed JSON body.' }; }
     if (!data || typeof data !== 'object' || Array.isArray(data)) return { status: 400, error: 'The JSON body must be an object.' };
     // Mismo formato que FormData: se aplanan los jugadores para reutilizar el parser.
     const entries = Object.entries(data).filter(([k]) => k !== 'players').map(([k, v]) => [k, typeof v === 'string' ? v : String(v ?? '')]);
-    (Array.isArray(data.players) ? data.players : []).forEach((p, i) => {
+    (Array.isArray(data.players) ? data.players : []).slice(0, 20).forEach((p, i) => {
       for (const f of ['name', 'age', 'position', 'jerseySize']) entries.push([`players[${i}][${f}]`, String(p?.[f] ?? '')]);
     });
     return { input: parseForm(entries) };
   }
-  return { status: 415, error: 'Unsupported content type.' };
+  const form = await new Response(bytes, { headers: { 'Content-Type': contentType } }).formData().catch(() => null);
+  if (!form) return { status: 400, error: 'Malformed form body.' };
+  return { input: parseForm(form.entries()) };
+}
+
+// El formulario solo se acepta desde el propio sitio (evita envíos desde páginas de terceros).
+function originAllowed(request, config) {
+  const origin = request.headers.get('Origin');
+  if (!origin || origin === 'null') return !origin; // sin Origin (herramientas/servidor): permitido; "null": no
+  try {
+    return new Set([new URL(request.url).origin, new URL(config.baseUrl).origin]).has(origin);
+  } catch {
+    return false;
+  }
 }
 
 export async function onRequestPost({ request, env }) {
@@ -48,6 +79,8 @@ export async function onRequestPost({ request, env }) {
     console.error('checkout: missing DB binding or STRIPE_SECRET_KEY');
     return json(503, { error: 'Payments are not available right now. Please contact KOA on WhatsApp.', reason: 'unavailable' });
   }
+
+  if (!originAllowed(request, config)) return json(403, { error: 'Forbidden origin.' });
 
   const body = await readBody(request);
   if (body.error) return json(body.status, { error: body.error });
