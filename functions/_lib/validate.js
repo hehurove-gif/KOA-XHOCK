@@ -1,7 +1,11 @@
 // Validación del lado servidor: mismas reglas que el formulario, pero aquí son la autoridad.
 import { LIMITS, POSITIONS, JERSEY_SIZES } from './config.js';
 
-const NAME_RE = /^\p{L}[\p{L} '’-]*$/u;
+// Nombres: letras Unicode (con sus marcas combinantes, p. ej. हिन्दी o ñ descompuesta), espacios, apóstrofo, guion y punto
+// ("St. John"). Mismo patrón que el formulario (script.js) para que lo que el navegador acepta no lo rechace el servidor.
+const NAME_RE = /^\p{L}[\p{L}\p{M}'’.\- ]*$/u;
+const NAME_MIN = 2;
+const NAME_MAX = 60;
 // Correo: letras/números Unicode y . _ % + ' - en la parte local; sin <>"();,:\\ ni espacios.
 const EMAIL_RE = /^[\p{L}\p{N}._%+'-]{1,64}@(?:[\p{L}\p{N}](?:[\p{L}\p{N}-]{0,61}[\p{L}\p{N}])?\.)+\p{L}{2,}$/u;
 const CONTROL_RE = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g;
@@ -27,6 +31,20 @@ export function normalizeCountry(raw, phoneCountry) {
     return /^[A-Z]{2}$/.test(code) ? code : 'ZZ';
   }
   return '';
+}
+
+// Nombre normalizado (espacios repetidos → uno) o '' si no cumple. Máx. 3 marcas combinantes seguidas (evita texto "zalgo").
+export function cleanName(value) {
+  const name = cleanText(value).replace(/ {2,}/g, ' ');
+  const length = [...name].length;
+  return length >= NAME_MIN && length <= NAME_MAX && NAME_RE.test(name) && !/\p{M}{4,}/u.test(name) ? name : '';
+}
+
+// Correo: caracteres permitidos, parte local ≤ 64 sin punto al inicio/final ni consecutivos, dominio con TLD de letras.
+export function isValidEmail(email) {
+  if (!email || email.length > 254 || !EMAIL_RE.test(email)) return false;
+  const local = email.slice(0, email.lastIndexOf('@'));
+  return !(local.startsWith('.') || local.endsWith('.') || local.includes('..'));
 }
 
 export function cleanText(value) {
@@ -61,16 +79,18 @@ function toInt(value) {
 
 export function validateCheckout(input) {
   const errors = {};
-  const firstName = cleanText(input.firstName);
-  const lastName = cleanText(input.lastName);
-  const email = cleanText(input.email).toLowerCase();
-  const phone = cleanText(input.phone);
+  const firstName = cleanName(input.firstName);
+  const lastName = cleanName(input.lastName);
+  // Correo y teléfono jamás se "reparan": con caracteres de control se rechazan (quitarlos cambiaría la dirección o el número).
+  const hasControl = value => typeof value === 'string' && /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/.test(value);
+  const email = hasControl(input.email) ? '' : cleanText(input.email).toLowerCase();
+  const phone = hasControl(input.phone) ? '' : cleanText(input.phone);
   const country = normalizeCountry(input.country, input.country_code);
   const quantity = toInt(input.quantity);
 
-  if (!firstName || firstName.length > 50 || !NAME_RE.test(firstName)) errors.firstName = 'Enter a valid first name (letters, spaces, apostrophes and hyphens).';
-  if (!lastName || lastName.length > 50 || !NAME_RE.test(lastName)) errors.lastName = 'Enter a valid last name (letters, spaces, apostrophes and hyphens).';
-  if (!email || email.length > 254 || !EMAIL_RE.test(email)) errors.email = 'Enter a valid email address.';
+  if (!firstName) errors.firstName = 'Enter a valid first name (letters, spaces, apostrophes and hyphens).';
+  if (!lastName) errors.lastName = 'Enter a valid last name (letters, spaces, apostrophes and hyphens).';
+  if (!isValidEmail(email)) errors.email = 'Enter a valid email address.';
   const digits = phone.replace(/\D+/g, '');
   if (!/^\+?[0-9() .-]{7,25}$/.test(phone) || digits.length < 7 || digits.length > 15) errors.phone = 'Enter a valid phone number (7 to 15 digits).';
   if (!/^[A-Z]{2}$/.test(country)) errors.country = 'Select your country.';
@@ -87,11 +107,11 @@ export function validateCheckout(input) {
   } else {
     list.forEach((raw, i) => {
       const n = i + 1;
-      const name = cleanText(raw?.name);
+      const name = cleanName(raw?.name);
       const age = toInt(raw?.age);
       const position = cleanText(raw?.position);
       const jerseySize = cleanText(raw?.jerseySize).toUpperCase();
-      if (!name || name.length > 60 || !NAME_RE.test(name)) errors[`players[${i}].name`] = `Player ${n}: enter a valid name.`;
+      if (!name) errors[`players[${i}].name`] = `Player ${n}: enter a valid name.`;
       if (!Number.isInteger(age) || age < LIMITS.ageMin || age > LIMITS.ageMax) errors[`players[${i}].age`] = `Player ${n}: age must be between ${LIMITS.ageMin} and ${LIMITS.ageMax}.`;
       if (!POSITIONS.includes(position)) errors[`players[${i}].position`] = `Player ${n}: select a valid position.`;
       if (!JERSEY_SIZES.includes(jerseySize)) errors[`players[${i}].jerseySize`] = `Player ${n}: select a valid jersey size.`;
