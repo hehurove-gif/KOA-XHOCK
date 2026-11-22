@@ -4,13 +4,17 @@ name = "koa-xhock"
 pages_build_output_dir = "_site"
 compatibility_date = "2025-01-01"
 
-# Base de datos de registros. Crear con:  npx wrangler d1 create koa-xhock
-# y pegar aquí el "database_id" que imprime el comando.
-[[d1_databases]]
-binding = "DB"
-database_name = "koa-xhock"
-database_id = "00000000-0000-0000-0000-000000000000"
-migrations_dir = "migrations"
+# Base de datos de registros (D1). Está COMENTADA a propósito: con un database_id falso, el despliegue en
+# Cloudflare Pages falla ("Invalid database UUID"). Cuando exista la base real:
+#   1) npx wrangler d1 create koa-xhock        (imprime el database_id)
+#   2) descomentar este bloque y pegar el id
+#   3) npm run db:migrate:remote
+# Para desarrollo local se usa wrangler.dev.toml (no se despliega).
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "koa-xhock"
+# database_id = "PEGAR-AQUI-EL-ID-REAL"
+# migrations_dir = "migrations"
 
 # Variables no secretas (los secretos —llaves de Stripe, tokens— se cargan en el panel de Pages,
 # nunca en este archivo). Ver 02-despliegue/CHECKOUT_STRIPE_D1.md.

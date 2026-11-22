@@ -10,9 +10,9 @@
     "clean": "rm -rf _site",
     "test": "node --no-warnings --test functions/test/*.test.js && node workers/tickets-proxy/test.mjs",
     "test:e2e": "npm run build && npm run db:migrate:local && node functions/test/e2e-local.mjs",
-    "db:migrate:local": "wrangler d1 migrations apply koa-xhock --local",
+    "db:migrate:local": "wrangler d1 migrations apply koa-xhock --local -c wrangler.dev.toml",
     "db:migrate:remote": "wrangler d1 migrations apply koa-xhock --remote",
-    "pages:dev": "npm run build && wrangler pages dev _site"
+    "pages:dev": "npm run build && wrangler pages dev _site --d1 DB=koa-xhock"
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.8",

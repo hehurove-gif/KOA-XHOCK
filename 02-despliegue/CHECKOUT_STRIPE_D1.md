@@ -11,12 +11,11 @@ Probado: `npm test` (32 pruebas + proxy) y `npm run test:e2e` (workerd real, D1 
 1. **Stripe**: cuenta verificada (Argentina/México según la entidad de KOA). Activar métodos de pago en
    Settings → Payment methods. OXXO y SPEI **requieren cobrar en MXN**: si `event.json` queda en USD solo
    funcionan tarjetas. Copiar la llave secreta (`sk_test_…` para pruebas, `sk_live_…` para producción).
-2. **D1**: `npx wrangler login` → `npx wrangler d1 create koa-xhock` → pegar el `database_id` en `wrangler.toml`
-   → `npm run db:migrate:remote`. Commit del `wrangler.toml`.
+2. **D1**: `npx wrangler login` → `npx wrangler d1 create koa-xhock` → en `wrangler.toml` descomentar el bloque `[[d1_databases]]` y pegar el `database_id`
+   → `npm run db:migrate:remote` → commit. (Está comentado porque un id falso hace fallar el despliegue en Pages.)
 3. **Pages → Settings → Variables and Secrets** (Production y Preview):
    - Secrets: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `ADMIN_TOKEN` (≥24 caracteres aleatorios), `PROXY_SECRET` (el mismo en el Worker).
    - Opcionales: `RESEND_API_KEY`, `MAIL_FROM`, `NOTIFY_EMAIL` (correos de confirmación/aviso), `HASH_SALT`, `PUBLIC_BASE_URL` (`https://koa-hub.com/tickets/`).
-   - Binding D1: Settings → Bindings → D1 → variable `DB` → base `koa-xhock` (si no lo toma de `wrangler.toml`).
 4. **Webhook de Stripe** → Developers → Webhooks → endpoint `https://<proyecto>.pages.dev/api/stripe-webhook`
    (directo al `pages.dev`, no por el Worker) con eventos: `checkout.session.completed`,
    `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`,

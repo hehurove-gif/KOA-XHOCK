@@ -24,7 +24,7 @@ const stripe = http.createServer((req, res) => {
 }).listen(STRIPE_PORT, '127.0.0.1');
 
 const dev = spawn('npx', [
-  'wrangler', 'pages', 'dev', '_site', '--port', String(PORT), '--local',
+  'wrangler', 'pages', 'dev', '_site', '--port', String(PORT), '--local', '--d1', 'DB=koa-xhock',
   '--binding', 'STRIPE_SECRET_KEY=sk_test_e2e', `STRIPE_WEBHOOK_SECRET=${WEBHOOK_SECRET}`,
   `STRIPE_API_BASE=http://127.0.0.1:${STRIPE_PORT}`, 'XHOCK_STATUS=open', `ADMIN_TOKEN=${ADMIN_TOKEN}`,
   `PUBLIC_BASE_URL=${BASE}/`

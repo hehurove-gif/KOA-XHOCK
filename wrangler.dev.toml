@@ -1,0 +1,13 @@
+# Solo para las migraciones locales (npm run db:migrate:local). No se despliega (Pages no admite rutas de config propias).
+name = "koa-xhock"
+pages_build_output_dir = "_site"
+compatibility_date = "2025-01-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "koa-xhock"
+database_id = "koa-xhock"
+migrations_dir = "migrations"
+
+[vars]
+TERMS_VERSION = "draft-2026-11"
