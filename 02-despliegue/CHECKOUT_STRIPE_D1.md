@@ -46,6 +46,9 @@ permanecen en D1; exporta el CSV antes de reutilizar.
 
 ## Operación
 
-- Exportar: `/tickets/api/admin/registrations?format=csv&status=paid` con el token (o desde `/tickets/admin/`).
+- Panel: `/tickets/admin/` (token en memoria de la pestaña). Filtros por estado, búsqueda (nombre/correo), país, equipo
+  (o `unassigned`) y fechas; totales (pedidos, ingresos, tallas, posiciones, países, equipos, pedidos por día) y
+  **asignación de equipo** a varios jugadores a la vez (`POST /api/admin/team`).
+- Exportar: botón "Download CSV" (respeta los filtros) o `/tickets/api/admin/registrations?format=csv&status=paid` con el token.
 - Límites: 10 boletos por pedido, edades 5–99 (ajustar en `functions/_lib/config.js` si KOA decide otros).
 - D1 gratis: 100k escrituras/día, 5 GB; sobra para este volumen.

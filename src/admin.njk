@@ -24,6 +24,15 @@ eleventyExcludeFromCollections: true
     .adm table{border-collapse:collapse;width:100%;font-size:.85rem}
     .adm th,.adm td{padding:8px 10px;text-align:left;border-bottom:1px solid rgba(255,255,255,.1);white-space:nowrap}
     .adm th{position:sticky;top:0;background:#181818}
+    .adm__cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0}
+    .adm__card{border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:12px}
+    .adm__card b{display:block;font-size:1.5rem}
+    .adm__card span{font-size:.75rem;color:rgba(255,255,255,.65)}
+    .adm__break{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:0 0 18px}
+    .adm__break h3{font-size:.85rem;margin:0 0 6px;color:rgba(255,255,255,.75)}
+    .adm__break table{font-size:.8rem}
+    .adm__assign{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin:0 0 12px;padding:12px;border:1px dashed rgba(255,255,255,.25);border-radius:10px}
+    .adm__ok{color:#9be59b;min-height:1.4em}
     .adm__error{color:#ff8d8d;min-height:1.4em}
     .adm__note{color:rgba(255,255,255,.6);font-size:.8rem;max-width:70ch}
   </style>
@@ -31,7 +40,7 @@ eleventyExcludeFromCollections: true
 <body class="ticket-page">
   <main class="adm">
     <h1>XHOCK registrations</h1>
-    <p class="adm__note">Private page. The token is only kept in this tab's memory and is sent to the API; it is never stored. Team assignment is done in the Cloudflare D1 console (table <code>players</code>, column <code>team</code>).</p>
+    <p class="adm__note">Private page. The token is only kept in this tab's memory and is sent to the API; it is never stored. Filters apply to the table, the totals, the CSV and the team assignment.</p>
     <form class="adm__bar" id="adm-form">
       <label>Admin token<input id="adm-token" type="password" autocomplete="off" required /></label>
       <label>Status
@@ -46,87 +55,151 @@ eleventyExcludeFromCollections: true
           <option value="refunded">Refunded</option>
         </select>
       </label>
+      <label>Search<input id="adm-q" type="search" placeholder="Name or email" /></label>
+      <label>Country<input id="adm-country" maxlength="2" placeholder="MX" style="min-width:90px;text-transform:uppercase" /></label>
+      <label>Team<input id="adm-team" placeholder="Name, or: unassigned" style="min-width:160px" /></label>
+      <label>From<input id="adm-from" type="date" style="min-width:150px" /></label>
+      <label>To<input id="adm-to" type="date" style="min-width:150px" /></label>
       <button type="submit">Load</button>
       <button type="button" class="is-secondary" id="adm-csv">Download CSV</button>
     </form>
     <p class="adm__error" id="adm-error" role="alert"></p>
-    <div class="adm__summary" id="adm-summary"></div>
+    <div class="adm__cards" id="adm-cards"></div>
+    <div class="adm__break" id="adm-break"></div>
+    <form class="adm__assign" id="adm-assign" hidden>
+      <label>Assign team to the selected players<input id="adm-assign-team" maxlength="40" placeholder="Team name (empty = clear)" /></label>
+      <button type="submit">Assign</button>
+      <span id="adm-selected" class="adm__note">0 selected</span>
+    </form>
+    <p class="adm__ok" id="adm-ok" role="status"></p>
     <div class="adm__wrap"><table id="adm-table"><thead></thead><tbody></tbody></table></div>
   </main>
   <script>
     (function () {
       var API = '../api/admin/registrations';
-      var form = document.getElementById('adm-form');
-      var tokenInput = document.getElementById('adm-token');
-      var statusSelect = document.getElementById('adm-status');
-      var errorBox = document.getElementById('adm-error');
+      var $ = function (id) { return document.getElementById(id); };
+      var tokenInput = $('adm-token'), errorBox = $('adm-error'), okBox = $('adm-ok');
       var COLS = [
         ['status', 'Status'], ['created_at', 'Created'], ['paid_at', 'Paid'], ['first_name', 'Buyer'], ['email', 'Email'],
         ['phone', 'Phone'], ['country', 'Country'], ['position_no', '#'], ['player_name', 'Player'], ['age', 'Age'],
         ['position', 'Position'], ['jersey_size', 'Jersey'], ['team', 'Team']
       ];
+      var FILTERS = [['status', 'adm-status'], ['q', 'adm-q'], ['country', 'adm-country'], ['team', 'adm-team'], ['from', 'adm-from'], ['to', 'adm-to']];
+      var selected = {};
 
-      function url(format) {
+      function query(format) {
         var q = [];
-        if (statusSelect.value) q.push('status=' + encodeURIComponent(statusSelect.value));
+        FILTERS.forEach(function (f) { var v = $(f[1]).value.trim(); if (v) q.push(f[0] + '=' + encodeURIComponent(v)); });
         if (format) q.push('format=' + format);
-        return API + (q.length ? '?' + q.join('&') : '');
+        return q.length ? '?' + q.join('&') : '';
       }
-      function call(format) {
-        return fetch(url(format), { headers: { Authorization: 'Bearer ' + tokenInput.value.trim() }, cache: 'no-store' });
-      }
+      function headers() { return { Authorization: 'Bearer ' + tokenInput.value.trim() }; }
       function fail(response) {
+        okBox.textContent = '';
         errorBox.textContent = response.status === 401 ? 'Wrong token.'
           : response.status === 503 ? 'Admin access is not configured on the server.'
+          : response.status === 400 || response.status === 422 ? 'Invalid filter or request.'
           : 'Something went wrong (' + response.status + ').';
       }
-      function cell(text) { var td = document.createElement('td'); td.textContent = text == null ? '' : String(text); return td; }
+      function el(tag, text, cls) { var e = document.createElement(tag); if (text != null) e.textContent = String(text); if (cls) e.className = cls; return e; }
 
-      function render(data) {
-        var head = document.querySelector('#adm-table thead');
-        var body = document.querySelector('#adm-table tbody');
-        head.textContent = ''; body.textContent = '';
-        var tr = document.createElement('tr');
-        COLS.forEach(function (c) { var th = document.createElement('th'); th.textContent = c[1]; tr.appendChild(th); });
+      function card(value, label) { var c = el('div', null, 'adm__card'); c.appendChild(el('b', value)); c.appendChild(el('span', label)); return c; }
+      function breakdown(title, map) {
+        var keys = Object.keys(map || {});
+        if (!keys.length) return null;
+        var box = el('div'); box.appendChild(el('h3', title));
+        var t = el('table');
+        keys.sort(function (a, b) { return map[b] - map[a]; }).forEach(function (k) {
+          var r = el('tr'); r.appendChild(el('td', k)); r.appendChild(el('td', map[k])); t.appendChild(r);
+        });
+        box.appendChild(t); return box;
+      }
+
+      function renderSummary(sm) {
+        var cards = $('adm-cards'), brk = $('adm-break');
+        cards.textContent = ''; brk.textContent = '';
+        cards.appendChild(card(sm.orders, 'orders in view'));
+        cards.appendChild(card(sm.paid_orders, 'paid orders'));
+        cards.appendChild(card(sm.players.paid, 'paid players'));
+        cards.appendChild(card(sm.players.unassigned, 'paid, no team'));
+        Object.keys(sm.revenue).forEach(function (cur) {
+          cards.appendChild(card(sm.revenue[cur].toLocaleString(undefined, { minimumFractionDigits: 2 }) + ' ' + cur, 'paid revenue'));
+        });
+        [['Orders by status', sm.by_status], ['Paid: jersey sizes', sm.by_jersey], ['Paid: positions', sm.by_position],
+         ['Paid: countries', sm.by_country], ['Paid: teams', sm.by_team], ['Paid: orders per day', sm.paid_by_day]].forEach(function (b) {
+          var node = breakdown(b[0], b[1]); if (node) brk.appendChild(node);
+        });
+      }
+
+      function updateSelected() {
+        var n = Object.keys(selected).length;
+        $('adm-selected').textContent = n + ' selected';
+      }
+
+      function renderTable(data) {
+        var head = document.querySelector('#adm-table thead'), body = document.querySelector('#adm-table tbody');
+        head.textContent = ''; body.textContent = ''; selected = {}; updateSelected();
+        var tr = el('tr'), th0 = el('th'), all = el('input'); all.type = 'checkbox'; all.setAttribute('aria-label', 'Select all');
+        th0.appendChild(all); tr.appendChild(th0);
+        COLS.forEach(function (c) { tr.appendChild(el('th', c[1])); });
         head.appendChild(tr);
-        var orders = {}, byStatus = {};
+        var boxes = [];
         data.rows.forEach(function (row) {
-          if (!orders[row.order_id]) { orders[row.order_id] = true; byStatus[row.status] = (byStatus[row.status] || 0) + 1; }
-          var r = document.createElement('tr');
+          var r = el('tr'), td = el('td'), box = el('input'); box.type = 'checkbox';
+          box.addEventListener('change', function () { if (box.checked) selected[row.player_id] = true; else delete selected[row.player_id]; updateSelected(); });
+          boxes.push([box, row.player_id]); td.appendChild(box); r.appendChild(td);
           COLS.forEach(function (c) {
             var v = row[c[0]];
             if (c[0] === 'first_name') v = row.first_name + ' ' + row.last_name;
-            r.appendChild(cell(v));
+            r.appendChild(el('td', v == null ? '' : v));
           });
           body.appendChild(r);
         });
-        var summary = document.getElementById('adm-summary');
-        summary.textContent = '';
-        var chips = [data.rows.length + ' players', Object.keys(orders).length + ' orders'];
-        Object.keys(byStatus).forEach(function (s) { chips.push(s + ': ' + byStatus[s]); });
-        if (data.truncated) chips.push('list truncated');
-        chips.forEach(function (t) { var s = document.createElement('span'); s.className = 'adm__chip'; s.textContent = t; summary.appendChild(s); });
+        all.addEventListener('change', function () {
+          boxes.forEach(function (b) { b[0].checked = all.checked; if (all.checked) selected[b[1]] = true; else delete selected[b[1]]; });
+          updateSelected();
+        });
+        $('adm-assign').hidden = !data.rows.length;
+        if (data.truncated) errorBox.textContent = 'List truncated at 5000 rows: narrow the filters.';
       }
 
-      form.addEventListener('submit', function (event) {
-        event.preventDefault();
-        errorBox.textContent = '';
-        call().then(function (r) { return r.ok ? r.json().then(render) : fail(r); })
-              .catch(function () { errorBox.textContent = 'Network error.'; });
-      });
+      function load() {
+        errorBox.textContent = ''; okBox.textContent = '';
+        return fetch(API + query(), { headers: headers(), cache: 'no-store' })
+          .then(function (r) { return r.ok ? r.json().then(function (d) { renderSummary(d.summary); renderTable(d); }) : fail(r); })
+          .catch(function () { errorBox.textContent = 'Network error.'; });
+      }
 
-      document.getElementById('adm-csv').addEventListener('click', function () {
+      $('adm-form').addEventListener('submit', function (e) { e.preventDefault(); load(); });
+
+      $('adm-csv').addEventListener('click', function () {
         errorBox.textContent = '';
         if (!tokenInput.value.trim()) { errorBox.textContent = 'Enter the token first.'; return; }
-        call('csv').then(function (r) {
+        fetch(API + query('csv'), { headers: headers(), cache: 'no-store' }).then(function (r) {
           if (!r.ok) return fail(r);
           return r.blob().then(function (blob) {
             var a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = 'xhock-registrations' + (statusSelect.value ? '-' + statusSelect.value : '') + '.csv';
+            a.download = 'xhock-registrations.csv';
             document.body.appendChild(a); a.click(); a.remove();
             setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
           });
+        }).catch(function () { errorBox.textContent = 'Network error.'; });
+      });
+
+      $('adm-assign').addEventListener('submit', function (e) {
+        e.preventDefault();
+        errorBox.textContent = ''; okBox.textContent = '';
+        var ids = Object.keys(selected).map(Number);
+        if (!ids.length) { errorBox.textContent = 'Select at least one player.'; return; }
+        if (ids.length > 300) { errorBox.textContent = 'Select up to 300 players at a time.'; return; }
+        fetch('../api/admin/team', {
+          method: 'POST', cache: 'no-store',
+          headers: Object.assign({ 'Content-Type': 'application/json' }, headers()),
+          body: JSON.stringify({ player_ids: ids, team: $('adm-assign-team').value })
+        }).then(function (r) {
+          if (!r.ok) return fail(r);
+          return r.json().then(function (d) { return load().then(function () { okBox.textContent = d.updated + ' player(s) updated' + (d.team ? ' → ' + d.team : ' (team cleared)') + '.'; }); });
         }).catch(function () { errorBox.textContent = 'Network error.'; });
       });
     })();

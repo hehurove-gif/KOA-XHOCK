@@ -3,11 +3,13 @@
 import * as checkout from '../functions/api/checkout.js';
 import * as webhook from '../functions/api/stripe-webhook.js';
 import * as registrations from '../functions/api/admin/registrations.js';
+import * as team from '../functions/api/admin/team.js';
 
 const ROUTES = {
   '/api/checkout': checkout,
   '/api/stripe-webhook': webhook,
-  '/api/admin/registrations': registrations
+  '/api/admin/registrations': registrations,
+  '/api/admin/team': team
 };
 
 export async function handleApi(request, env, ctx) {

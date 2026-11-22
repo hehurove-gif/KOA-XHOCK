@@ -7,7 +7,8 @@ import { createD1 } from './d1-shim.js';
 import { goodEntries } from './validate.test.js';
 import { onRequestPost as checkout } from '../api/checkout.js';
 import { onRequestPost as webhook } from '../api/stripe-webhook.js';
-import { onRequestGet as admin, csvCell } from '../api/admin/registrations.js';
+import { onRequestGet as admin, csvCell, summarize } from '../api/admin/registrations.js';
+import { onRequestPost as assignTeam } from '../api/admin/team.js';
 import { signWebhook } from '../_lib/stripe.js';
 
 const WEBHOOK_SECRET = 'whsec_test_secret';
@@ -366,4 +367,64 @@ test('Turnstile: si Cloudflare no responde, falla cerrado con 503', async () => 
   assert.equal(response.status, 503);
   assert.equal((await response.json()).reason, 'captcha_unavailable');
   assert.equal(await count('orders'), 0);
+});
+
+// ------------------------------------------------------------------ Admin: filtros, resumen y equipos
+test('admin: resumen (pedidos, ingresos, tallas, países) y filtros', async () => {
+  const a = await createOrder({ email: 'ana@example.com' });
+  await sendWebhook('checkout.session.completed', sessionOf(a.order));
+  await createOrder({ email: 'pendiente@example.com' });
+
+  const all = await (await admin({ request: adminRequest(''), env })).json();
+  assert.equal(all.summary.orders, 2);
+  assert.equal(all.summary.paid_orders, 1);
+  assert.equal(all.summary.by_status.paid, 1);
+  assert.equal(all.summary.by_status.pending, 1);
+  assert.equal(all.summary.revenue.USD, 350);
+  assert.equal(all.summary.players.paid, 2);
+  assert.equal(all.summary.players.unassigned, 2);
+  assert.equal(Object.values(all.summary.by_jersey).reduce((x, y) => x + y, 0), 2);
+
+  const byEmail = await (await admin({ request: adminRequest('?q=ana%40example'), env })).json();
+  assert.equal(byEmail.count, 2);
+  const nothing = await (await admin({ request: adminRequest('?q=zzzz'), env })).json();
+  assert.equal(nothing.count, 0);
+  const wildcard = await (await admin({ request: adminRequest('?q=%25'), env })).json();
+  assert.equal(wildcard.count, 0, 'el % del buscador no actúa como comodín');
+  const today = new Date().toISOString().slice(0, 10);
+  assert.equal((await (await admin({ request: adminRequest(`?from=${today}&to=${today}`), env })).json()).count, 4);
+  assert.equal((await (await admin({ request: adminRequest('?from=2000-01-01&to=2000-01-02'), env })).json()).count, 0);
+  assert.equal((await (await admin({ request: adminRequest('?country=MX'), env })).json()).count >= 0, true);
+  assert.equal((await admin({ request: adminRequest('?country=MEX'), env })).status, 400);
+  assert.equal((await admin({ request: adminRequest('?from=ayer'), env })).status, 400);
+  assert.equal((await (await admin({ request: adminRequest("?q=' OR 1=1 --"), env })).json()).count, 0, 'sin inyección SQL');
+});
+
+test('admin: asignar equipo a jugadores y filtrar por equipo', async () => {
+  const a = await createOrder({ email: 'equipo@example.com' });
+  await sendWebhook('checkout.session.completed', sessionOf(a.order));
+  const rows = (await (await admin({ request: adminRequest('?status=paid'), env })).json()).rows;
+  const post = (body, token = ADMIN_TOKEN) => assignTeam({
+    request: new Request('https://x/api/admin/team', { method: 'POST', body: JSON.stringify(body), headers: token ? { Authorization: `Bearer ${token}` } : {} }), env
+  });
+
+  assert.equal((await post({ player_ids: [rows[0].player_id], team: 'Azul' }, null)).status, 401);
+  assert.equal((await post({ player_ids: [], team: 'Azul' })).status, 422);
+  assert.equal((await post({ player_ids: ['1; DROP TABLE players'], team: 'Azul' })).status, 422);
+  assert.equal((await post({ player_ids: [rows[0].player_id], team: 'x'.repeat(41) })).status, 422);
+
+  const ok = await post({ player_ids: [rows[0].player_id], team: 'Azul' });
+  assert.deepEqual(await ok.json(), { updated: 1, team: 'Azul' });
+  const blue = await (await admin({ request: adminRequest('?team=Azul'), env })).json();
+  assert.equal(blue.count, 1);
+  const free = await (await admin({ request: adminRequest('?team=unassigned&status=paid'), env })).json();
+  assert.equal(free.count, 1);
+  assert.equal(blue.summary.by_team.Azul, 1);
+
+  await post({ player_ids: [rows[0].player_id], team: '' });
+  assert.equal((await (await admin({ request: adminRequest('?team=unassigned&status=paid'), env })).json()).count, 2);
+});
+
+test('summarize: lista vacía no falla', () => {
+  assert.equal(summarize([]).orders, 0);
 });
