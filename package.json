@@ -14,7 +14,8 @@
     "db:migrate:remote": "wrangler d1 migrations apply koa-xhock --remote",
     "dev:worker": "npm run build && wrangler dev -c wrangler.dev.toml",
     "test:window": "XHOCK_STATUS=auto npm run build && npm run db:migrate:local && node functions/test/e2e-window.mjs",
-    "test:browser": "XHOCK_STATUS=open npm run build && npm run db:migrate:local && node functions/test/browser-e2e.mjs"
+    "test:browser": "XHOCK_STATUS=open npm run build && npm run db:migrate:local && node functions/test/browser-e2e.mjs",
+    "test:validation": "XHOCK_STATUS=open npm run build && npm run db:migrate:local && node functions/test/browser-validation.mjs"
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.8",

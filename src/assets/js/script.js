@@ -633,13 +633,16 @@
      11. Inline validation (QA-001, QA-002)
      ====================================================================== */
   const NAME_PATTERN = /^\p{L}[\p{L}\p{M}'’.\- ]*$/u;
+  // Mismas reglas que functions/_lib/validate.js (el servidor siempre vuelve a validar).
+  const EMAIL_PATTERN = /^[\p{L}\p{N}._%+'-]{1,64}@(?:[\p{L}\p{N}](?:[\p{L}\p{N}-]{0,61}[\p{L}\p{N}])?\.)+\p{L}{2,}$/u;
 
   function nameError(value, label) {
-    const clean = value.trim().replace(/\s+/g, ' ');
+    const clean = value.normalize('NFC').replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '').trim().replace(/ {2,}/g, ' ');
+    const length = [...clean].length;
     if (!clean) return `Please enter your ${label}.`;
-    if (clean.length < 2) return `The ${label} must have at least 2 characters.`;
-    if (clean.length > 60) return `The ${label} is too long (60 characters max).`;
-    if (!NAME_PATTERN.test(clean)) return `The ${label} can only contain letters, spaces, apostrophes and hyphens.`;
+    if (length < 2) return `The ${label} must have at least 2 characters.`;
+    if (length > 60) return `The ${label} is too long (60 characters max).`;
+    if (!NAME_PATTERN.test(clean) || /\p{M}{4,}/u.test(clean)) return `The ${label} can only contain letters, spaces, apostrophes and hyphens.`;
     return '';
   }
 
@@ -647,22 +650,25 @@
     const clean = value.trim();
     if (!clean) return 'Please enter your email address.';
     if (clean.length > 254) return 'The email address is too long.';
-    if (!/^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(clean)) return 'Enter a valid email address, e.g. name@email.com.';
+    const local = clean.slice(0, clean.lastIndexOf('@'));
+    if (!EMAIL_PATTERN.test(clean) || local.startsWith('.') || local.endsWith('.') || local.includes('..')) return 'Enter a valid email address, e.g. name@email.com.';
     return '';
   }
 
   function phoneError(value) {
-    const digits = value.replace(/\D/g, '');
-    if (!digits) return 'Please enter your phone number.';
-    if (digits.length < 8) return 'The phone number is too short (at least 8 digits).';
+    const raw = value.trim();
+    const digits = raw.replace(/\D/g, '');
+    if (!raw) return 'Please enter your phone number.';
+    if (!/^\+?[0-9() .-]+$/.test(raw)) return 'The phone number can only contain digits, spaces, +, - and parentheses.';
+    if (digits.length < 7) return 'The phone number is too short (at least 7 digits).';
     if (digits.length > 15) return 'The phone number is too long (15 digits max).';
     return '';
   }
 
   function ageError(value) {
     if (String(value).trim() === '') return 'Please enter the player age.';
+    if (!/^\d{1,3}$/.test(String(value).trim())) return 'Enter the age as a whole number.';
     const age = Number.parseInt(value, 10);
-    if (!Number.isFinite(age)) return 'Enter the age as a whole number.';
     if (age < AGE_MIN || age > AGE_MAX) return `The age must be between ${AGE_MIN} and ${AGE_MAX}.`;
     return '';
   }
@@ -674,8 +680,8 @@
     tmPhone: phoneError,
     tmCountry: value => (value ? '' : 'Please select your country.'),
     tmQty: value => {
+      if (!/^\d{1,3}$/.test(String(value).trim())) return 'Enter the number of tickets.';
       const quantity = Number.parseInt(value, 10);
-      if (!Number.isFinite(quantity)) return 'Enter the number of tickets.';
       if (quantity < QTY_MIN || quantity > QTY_MAX) return `You can buy between ${QTY_MIN} and ${QTY_MAX} tickets per order.`;
       return '';
     },
