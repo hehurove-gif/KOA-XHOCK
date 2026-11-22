@@ -11,5 +11,7 @@
   "ogImage": "assets/img/og-xhock.jpg",
   "gtmId": "GTM-PPGNTDHR",
   "metaPixelId": "1026403033730229",
-  "checkoutEndpoint": "api/checkout"
+  "checkoutEndpoint": "api/checkout",
+  "developerName": "Hetor",
+  "developerUrl": ""
 }
