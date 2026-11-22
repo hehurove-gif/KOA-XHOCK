@@ -11,6 +11,20 @@ const ATTRIBUTION_KEYS = new Set([
   'landing_page', 'attribution_referrer', 'first_seen', 'last_seen'
 ]);
 
+// El formulario envía el nombre del país del select ("Mexico"); también se acepta el código ISO de 2 letras.
+// "Other" usa el país elegido en el selector de teléfono (country_code) o "ZZ" (desconocido).
+const COUNTRY_NAMES = { CANADA: 'CA', 'UNITED STATES': 'US', USA: 'US', MEXICO: 'MX', 'MÉXICO': 'MX' };
+export function normalizeCountry(raw, phoneCountry) {
+  const up = cleanText(raw).toUpperCase();
+  if (/^[A-Z]{2}$/.test(up)) return up;
+  if (COUNTRY_NAMES[up]) return COUNTRY_NAMES[up];
+  if (up === 'OTHER') {
+    const code = cleanText(phoneCountry).toUpperCase();
+    return /^[A-Z]{2}$/.test(code) ? code : 'ZZ';
+  }
+  return '';
+}
+
 export function cleanText(value) {
   if (typeof value !== 'string' && typeof value !== 'number') return '';
   return String(value).normalize('NFC').replace(CONTROL_RE, '').trim();
@@ -47,7 +61,7 @@ export function validateCheckout(input) {
   const lastName = cleanText(input.lastName);
   const email = cleanText(input.email).toLowerCase();
   const phone = cleanText(input.phone);
-  const country = cleanText(input.country).toUpperCase();
+  const country = normalizeCountry(input.country, input.country_code);
   const quantity = toInt(input.quantity);
 
   if (!firstName || firstName.length > 50 || !NAME_RE.test(firstName)) errors.firstName = 'Enter a valid first name (letters, spaces, apostrophes and hyphens).';

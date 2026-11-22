@@ -57,3 +57,14 @@ test('ignora índices de jugador fuera de formato y claves peligrosas', () => {
   assert.deepEqual(parsed.players, []);
   assert.equal(Object.getPrototypeOf(parsed), Object.prototype);
 });
+
+test('país: acepta el nombre del select del formulario, el ISO y "Other" con el país del teléfono', () => {
+  const country = value => validateCheckout(parseForm(goodEntries({ country: value[0], country_code: value[1] }))).value?.country;
+  assert.equal(country(['Mexico']), 'MX');
+  assert.equal(country(['Canada']), 'CA');
+  assert.equal(country(['United States']), 'US');
+  assert.equal(country(['mx']), 'MX');
+  assert.equal(country(['Other', 'br']), 'BR');
+  assert.equal(country(['Other']), 'ZZ');
+  assert.equal(validateCheckout(parseForm(goodEntries({ country: 'Atlantis' }))).errors.country, 'Select your country.');
+});

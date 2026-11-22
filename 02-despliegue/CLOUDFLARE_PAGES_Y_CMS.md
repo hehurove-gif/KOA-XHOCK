@@ -132,4 +132,6 @@ KOA debe decidir con su asesor legal cuál usar; `privacy.njk` describe el modo 
 
 ## CI
 
-`.github/workflows/ci.yml` corre build, pruebas y `wrangler deploy --dry-run` en cada push a `main` y en cada PR.
+`.github/workflows/ci.yml` corre en cada push a `main` y en cada PR: build, pruebas unitarias/de flujo (`npm test`),
+`wrangler deploy --dry-run`, `npm run test:e2e` (API en workerd) y `npm run test:browser` (navegador real: llena el
+formulario, redirige a Stripe simulado, webhook y panel admin). En local: `CHROME_PATH=/ruta/a/chrome npm run test:browser`.

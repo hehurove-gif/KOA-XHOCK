@@ -12,11 +12,13 @@
     "test:e2e": "npm run build && npm run db:migrate:local && node functions/test/e2e-local.mjs",
     "db:migrate:local": "wrangler d1 migrations apply koa-xhock --local -c wrangler.dev.toml",
     "db:migrate:remote": "wrangler d1 migrations apply koa-xhock --remote",
-    "dev:worker": "npm run build && wrangler dev -c wrangler.dev.toml"
+    "dev:worker": "npm run build && wrangler dev -c wrangler.dev.toml",
+    "test:browser": "XHOCK_STATUS=open npm run build && npm run db:migrate:local && node functions/test/browser-e2e.mjs"
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.8",
-    "wrangler": "4.166.0"
+    "wrangler": "4.166.0",
+    "playwright-core": "^1.64.1"
   },
   "dependencies": {
     "intl-tel-input": "25.2.0"

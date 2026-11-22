@@ -1,46 +1,12 @@
 // Prueba de humo en el runtime real de Cloudflare (workerd) con D1 local y un Stripe simulado.
 //   npm run build && npm run db:migrate:local && node functions/test/e2e-local.mjs
-import { spawn } from 'node:child_process';
-import http from 'node:http';
 import assert from 'node:assert/strict';
 import { signWebhook } from '../_lib/stripe.js';
+import { startStack, WEBHOOK_SECRET, ADMIN_TOKEN, RUN } from './harness.mjs';
 
-const PORT = 8788;
-const STRIPE_PORT = 8765;
-const BASE = `http://127.0.0.1:${PORT}`;
-const WEBHOOK_SECRET = 'whsec_e2e';
-const ADMIN_TOKEN = 'e2e-admin-token-'.padEnd(40, 'x');
-
-const RUN = Date.now().toString(36);
-const stripeCalls = [];
-const stripe = http.createServer((req, res) => {
-  let body = '';
-  req.on('data', c => (body += c));
-  req.on('end', () => {
-    stripeCalls.push(new URLSearchParams(body));
-    const id = `cs_e2e_${RUN}_${stripeCalls.length}`;
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ id, url: `https://checkout.stripe.com/c/pay/${id}` }));
-  });
-}).listen(STRIPE_PORT, '127.0.0.1');
-
-const dev = spawn('npx', [
-  'wrangler', 'dev', '-c', 'wrangler.dev.toml', '--port', String(PORT), '--ip', '127.0.0.1',
-  '--var', 'STRIPE_SECRET_KEY:sk_test_e2e', `STRIPE_WEBHOOK_SECRET:${WEBHOOK_SECRET}`,
-  `STRIPE_API_BASE:http://127.0.0.1:${STRIPE_PORT}`, 'XHOCK_STATUS:open', `ADMIN_TOKEN:${ADMIN_TOKEN}`,
-  `PUBLIC_BASE_URL:${BASE}/`
-], { stdio: ['ignore', 'pipe', 'pipe'] });
-let log = '';
-dev.stdout.on('data', d => (log += d));
-dev.stderr.on('data', d => (log += d));
-
-async function waitReady() {
-  for (let i = 0; i < 90; i++) {
-    try { if ((await fetch(`${BASE}/`)).ok) return; } catch { /* aún no */ }
-    await new Promise(r => setTimeout(r, 1000));
-  }
-  throw new Error('wrangler no arrancó:\n' + log.slice(-2000));
-}
+const stack = await startStack();
+const { base: BASE, stripeCalls } = stack;
+const log = { toString: () => stack.log };
 
 function form() {
   const f = new FormData();
@@ -53,8 +19,6 @@ function form() {
 
 let failed = false;
 try {
-  await waitReady();
-
   // 1. checkout
   let res = await fetch(`${BASE}/api/checkout`, { method: 'POST', body: form() });
   assert.equal(res.status, 200, await res.clone().text());
@@ -94,9 +58,8 @@ try {
 } catch (error) {
   failed = true;
   console.error('E2E falló:', error.message);
-  console.error(log.slice(-1500));
+  console.error(stack.log.slice(-1500));
 } finally {
-  dev.kill('SIGTERM');
-  stripe.close();
+  stack.stop();
   setTimeout(() => process.exit(failed ? 1 : 0), 500);
 }
