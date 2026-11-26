@@ -368,6 +368,27 @@ content:
     - name: answer
       label: Respuesta
       type: text
+- name: translations
+  label: Traducciones al español (botón EN/ES)
+  type: file
+  path: src/_data/cms/translations.json
+  format: json
+  fields:
+  - name: es
+    label: Frases
+    description: 'Cada fila es una frase en inglés del sitio y su versión en español. Si cambias un texto en inglés, agrega aquí su traducción o se verá en inglés. Fechas e importes se escriben como {d1} (fecha), {m1} (importe) y {n1} (número).'
+    type: object
+    list:
+      collapsible:
+        collapsed: true
+        summary: '{en}'
+    fields:
+    - name: en
+      label: Inglés (texto exacto)
+      type: text
+    - name: es
+      label: Español
+      type: text
 - name: site
   label: Ajustes del sitio (contacto, redes, pie de página)
   type: file

@@ -1,3 +1,4 @@
 {% if site.turnstileSiteKey and loadTurnstile %}  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 {% endif %}  <script src="assets/js/analytics.js" data-gtm="{{ site.gtmId }}" data-pixel="{{ site.metaPixelId }}" data-consent="{{ site.analyticsConsent | default('banner') }}" defer></script>
   <script src="assets/js/script.js" defer></script>
+  <script type="module" src="assets/js/i18n.js"></script>

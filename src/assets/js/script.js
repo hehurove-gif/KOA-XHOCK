@@ -755,18 +755,18 @@
   }
 
   if (ticketForm) {
-    const liveFields = $$('input, select', ticketForm).filter(input => input.type !== 'hidden');
-
-    liveFields.forEach(input => {
-      input.addEventListener('blur', () => validateField(input));
-      input.addEventListener('input', () => {
-        if (input.getAttribute('aria-invalid') === 'true') validateField(input);
-        queueDraftSave();
-      });
-      input.addEventListener('change', () => {
-        validateField(input);
-        queueDraftSave();
-      });
+    // Delegado en el formulario: las tarjetas de jugador se vuelven a crear al cambiar la cantidad y también deben validarse en vivo.
+    const isLiveField = el => el instanceof HTMLElement && el.matches('input, select') && el.type !== 'hidden';
+    ticketForm.addEventListener('blur', event => { if (isLiveField(event.target)) validateField(event.target); }, true);
+    ticketForm.addEventListener('input', event => {
+      if (!isLiveField(event.target)) return;
+      if (event.target.getAttribute('aria-invalid') === 'true') validateField(event.target);
+      queueDraftSave();
+    });
+    ticketForm.addEventListener('change', event => {
+      if (!isLiveField(event.target)) return;
+      validateField(event.target);
+      queueDraftSave();
     });
   }
 

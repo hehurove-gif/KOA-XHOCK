@@ -1,12 +1,14 @@
 // Ventana de venta automática en workerd real: el Worker sirve la variante de página según la hora.
 //   XHOCK_STATUS=auto npm run build && node functions/test/e2e-window.mjs   (lo hace `npm run test:window`)
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+const event = JSON.parse(readFileSync(new URL('../../src/_data/cms/event.json', import.meta.url), 'utf8'));
 import { startStack } from './harness.mjs';
 
 const cases = [
-  ['soon', { salesOpensAt: '2999-01-01T10:00', salesClosesAt: '2999-02-01' }, { form: false, text: 'Tickets coming soon' }],
+  ['soon', { salesOpensAt: '2999-01-01T10:00', salesClosesAt: '2999-02-01' }, { form: false, text: event.soonTitle }],
   ['open', { salesOpensAt: '2000-01-01T10:00', salesClosesAt: '2999-02-01' }, { form: true, text: null }],
-  ['closed', { salesOpensAt: '2000-01-01', salesClosesAt: '2000-02-01' }, { form: false, text: 'XHOCK 2026 has ended' }]
+  ['closed', { salesOpensAt: '2000-01-01', salesClosesAt: '2000-02-01' }, { form: false, text: event.closedTitle }]
 ];
 let failed = false;
 let n = 0;

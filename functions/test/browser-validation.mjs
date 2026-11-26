@@ -63,8 +63,8 @@ try {
   await typeInto('#tmQty', '2');
 
   // Jugador 1: edad (la unidad más sensible), posición y talla.
-  await compare('age', '#tmPlayerAge1', [...AGES_OK.map(c => c[0]), ...AGES_BAD], v => Boolean(server({ quantity: '1' }, [{ ...goodPlayer, age: v }]).players));
-  await compare('player name', '#tmPlayerName1', [...NAMES_OK.map(c => c[0]), ...NAMES_BAD], v => Boolean(server({ quantity: '1' }, [{ ...goodPlayer, name: v }]).players));
+  await compare('age', '#tmPlayerAge1', [...AGES_OK.map(c => c[0]), ...AGES_BAD], v => Boolean(server({ quantity: '1' }, [{ ...goodPlayer, age: v }])['players[0].age']));
+  await compare('player name', '#tmPlayerName1', [...NAMES_OK.map(c => c[0]), ...NAMES_BAD], v => Boolean(server({ quantity: '1' }, [{ ...goodPlayer, name: v }])['players[0].name']));
 
   // País y términos
   assert.equal((await typeInto('#tmCountry', ''))[1], true, 'país vacío debe marcar error');
