@@ -13,8 +13,8 @@ const cases = [
 let failed = false;
 let n = 0;
 for (const [state, window, expect] of cases) {
-  n += 1; // puerto distinto por caso: evita hablar con el proceso anterior que aún se está cerrando
-  const stack = await startStack({ port: 8790 + n, stripePort: 8780 + n, status: 'auto', extraVars: [`EVENT_OVERRIDES:${JSON.stringify(window)}`] });
+  n += 1; // puerto distinto por caso y fuera de los que usan las otras pruebas (8788, 8790, 8791)
+  const stack = await startStack({ port: 8800 + n, stripePort: 8780 + n, status: 'auto', extraVars: [`EVENT_OVERRIDES:${JSON.stringify(window)}`] });
   try {
     const tickets = await fetch(`${stack.base}/tickets`);
     const html = await tickets.text();

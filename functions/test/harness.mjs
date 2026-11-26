@@ -9,6 +9,8 @@ export const RUN = Date.now().toString(36);
 export async function startStack({ port = 8788, stripePort = 8765, extraVars = [], status = 'open' } = {}) {
   const base = `http://127.0.0.1:${port}`;
   const stripeCalls = [];
+  // Si algo ya responde en el puerto, la prueba hablaría con ese servidor (otro estado) y no con el suyo.
+  if (await fetch(`${base}/`).then(() => true, () => false)) throw new Error(`el puerto ${port} ya está ocupado`);
   const stripe = http.createServer((req, res) => {
     let body = '';
     req.on('data', c => (body += c));
@@ -25,8 +27,18 @@ export async function startStack({ port = 8788, stripePort = 8765, extraVars = [
     '--var', 'STRIPE_SECRET_KEY:sk_test_e2e', `STRIPE_WEBHOOK_SECRET:${WEBHOOK_SECRET}`,
     `STRIPE_API_BASE:http://127.0.0.1:${stripePort}`, `XHOCK_STATUS:${status}`, `ADMIN_TOKEN:${ADMIN_TOKEN}`,
     `PUBLIC_BASE_URL:${base}/`, ...extraVars
-  ], { stdio: ['ignore', 'pipe', 'pipe'] });
-  const stack = { base, stripeCalls, log: '', stop() { dev.kill('SIGTERM'); stripe.close(); } };
+  ], { stdio: ['ignore', 'pipe', 'pipe'], detached: process.platform !== 'win32' });
+  // SIGTERM solo a npx puede dejar vivo a workerd; se cierra el grupo completo (en Windows, solo el proceso).
+  const kill = () => {
+    try {
+      if (process.platform === 'win32') dev.kill('SIGTERM');
+      else process.kill(-dev.pid, 'SIGTERM');
+    } catch { /* ya había terminado */ }
+  };
+  // Al ir en su propio grupo ya no recibe el Ctrl+C de la terminal: se cierra también al salir.
+  process.once('exit', kill);
+  for (const signal of ['SIGINT', 'SIGTERM']) process.once(signal, () => process.exit(1));
+  const stack = { base, stripeCalls, log: '', stop() { kill(); stripe.close(); } };
   dev.stdout.on('data', d => (stack.log += d));
   dev.stderr.on('data', d => (stack.log += d));
 
