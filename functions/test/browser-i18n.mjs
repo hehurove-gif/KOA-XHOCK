@@ -91,7 +91,7 @@ try {
   ok('formulario en español: errores, "Jugador 2", total, mensajes con números');
 
   // 5. Cobertura: ninguna cadena visible de las páginas queda sin traducir
-  for (const file of ['index.html', 'tickets.html', 'success.html']) {
+  for (const file of ['index.html', 'tickets.html', 'success.html', 'terms.html', 'privacy.html']) {
     await page.goto(`${base}/${file}`);
     await page.waitForSelector('html.i18n-ready');
     await page.waitForTimeout(300);
@@ -101,6 +101,25 @@ try {
     assert.deepEqual(leftovers.map(([en]) => en), [], `${file}: frases sin traducir en pantalla`);
   }
   ok('cobertura: sin frases del diccionario en inglés en home, tickets y success');
+
+  // 5a. Todo lo que se ve en inglés tiene su traducción en el diccionario (si falta algo, el cliente lo verá en inglés)
+  for (const file of ['index.html', 'tickets.html', 'success.html', 'terms.html', 'privacy.html']) {
+    await page.goto(`${base}/${file}?lang=en`);
+    await page.waitForSelector('html.i18n-ready');
+    await page.waitForTimeout(300);
+    const missing = (await visible(page)).split('\n').filter(t => /\p{L}/u.test(t) && !/^[<]|^(src|height)=/.test(t) && !dict.has(keyFor(t)));
+    assert.deepEqual([...new Set(missing)], [], `${file}: frases sin traducción en el diccionario`);
+  }
+  ok('todas las frases visibles tienen traducción en el diccionario');
+
+  // 5b. Páginas legales: el botón existe y traduce títulos y fechas
+  await page.goto(`${base}/terms.html?lang=es`);
+  await page.waitForSelector('html.i18n-ready');
+  assert.equal(await page.textContent('[data-lang-toggle]'), 'EN');
+  assert.match(await page.textContent('h1'), /Términos y Condiciones/);
+  assert.match(await page.textContent('.legal-meta'), /23 – 26 de abril · Última actualización: 25 de noviembre de 2026/);
+  assert.match(await page.title(), /^Términos y Condiciones/);
+  ok('términos y privacidad: botón, título, fechas en español');
 
   // 6. Volver a inglés restaura todo exactamente
   await page.goto(`${base}/index.html`);

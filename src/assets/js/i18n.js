@@ -158,7 +158,7 @@ function mountButton() {
   button.setAttribute('translate', 'no');
   button.addEventListener('click', () => setLang(lang === 'en' ? 'es' : 'en'));
   const nav = document.querySelector('.nav');
-  const bar = document.querySelector('.ticket-header__inner');
+  const bar = document.querySelector('.ticket-header__inner, .legal-header');
   if (nav) nav.append(button);
   else if (bar) bar.append(button);
   else { button.classList.add('lang-toggle--float'); document.body.append(button); }

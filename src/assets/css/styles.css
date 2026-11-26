@@ -1887,5 +1887,5 @@ html[data-lang="es"]:not(.i18n-ready) body{opacity:0}
 .lang-toggle:hover,.lang-toggle:focus-visible{background:rgba(235,226,102,.16);border-color:var(--color-primary);color:var(--color-primary)}
 .nav{grid-template-columns:auto 1fr auto auto}
 .nav .lang-toggle{justify-self:end}
-.ticket-header__inner .lang-toggle{margin-left:12px}
+.ticket-header__inner .lang-toggle,.legal-header .lang-toggle{margin-left:12px}
 .lang-toggle--float{position:fixed;top:14px;right:14px;z-index:9999}

@@ -1223,6 +1223,630 @@
     {
       "en": "Order summary",
       "es": "Resumen del pedido"
+    },
+    {
+      "en": "(Pixel), for measurement and advertising, only after you interact with the page.",
+      "es": "(Pixel), para medición y publicidad, solo después de que interactúes con la página."
+    },
+    {
+      "en": "(Tag Manager / Analytics) and",
+      "es": "(Tag Manager / Analytics) y"
+    },
+    {
+      "en": "(key",
+      "es": "(clave"
+    },
+    {
+      "en": ") and you can change it at any time from",
+      "es": ") y puedes cambiarla en cualquier momento desde"
+    },
+    {
+      "en": ", as payment processor, for the checkout and payment confirmation.",
+      "es": ", como procesador de pagos, para el pago y la confirmación del pago."
+    },
+    {
+      "en": ", so you do not lose what you typed if you reload or leave the page. It expires after {n1} hours and is deleted when the checkout starts successfully. It never leaves your device.",
+      "es": ", para que no pierdas lo que escribiste si recargas o sales de la página. Caduca a las {n1} horas y se borra cuando el pago se inicia correctamente. Nunca sale de tu dispositivo."
+    },
+    {
+      "en": ". Formal address:",
+      "es": ". Domicilio formal:"
+    },
+    {
+      "en": ". The website enforces this limit and the server must enforce it again.",
+      "es": ". El sitio aplica este límite y el servidor debe volver a aplicarlo."
+    },
+    {
+      "en": "A Player Ticket does",
+      "es": "Un boleto de jugador"
+    },
+    {
+      "en": "Access to the venue during the event for the registered player.",
+      "es": "Acceso a la sede durante el evento para el jugador registrado."
+    },
+    {
+      "en": "Analytics cookies from Google and Meta are only loaded if you accept them in the cookie banner. Your choice is kept in",
+      "es": "Las cookies de analítica de Google y Meta solo se cargan si las aceptas en el aviso de cookies. Tu elección se guarda en"
+    },
+    {
+      "en": "Assignment to a team by XHOCK, including for individual registrations.",
+      "es": "Asignación a un equipo por parte de XHOCK, incluso para registros individuales."
+    },
+    {
+      "en": "Authorities, when required by law.",
+      "es": "Autoridades, cuando la ley lo exija."
+    },
+    {
+      "en": "Back to tickets",
+      "es": "Volver a boletos"
+    },
+    {
+      "en": "Buyer contact data:",
+      "es": "Datos de contacto del comprador:"
+    },
+    {
+      "en": "Campaign attribution",
+      "es": "Atribución de campañas"
+    },
+    {
+      "en": "Campaign data:",
+      "es": "Datos de campaña:"
+    },
+    {
+      "en": "Changes and contact",
+      "es": "Cambios y contacto"
+    },
+    {
+      "en": "Changes, cancellation and refunds",
+      "es": "Cambios, cancelaciones y reembolsos"
+    },
+    {
+      "en": "Conduct, safety and risk",
+      "es": "Conducta, seguridad y riesgo"
+    },
+    {
+      "en": "Contents",
+      "es": "Contenido"
+    },
+    {
+      "en": "Cookies, local storage and retention",
+      "es": "Cookies, almacenamiento local y conservación"
+    },
+    {
+      "en": "Draft for KOA legal review.",
+      "es": "Borrador para revisión legal de KOA."
+    },
+    {
+      "en": "Google",
+      "es": "Google"
+    },
+    {
+      "en": "Governing law",
+      "es": "Ley aplicable"
+    },
+    {
+      "en": "Hosting and email providers",
+      "es": "Proveedores de alojamiento y correo"
+    },
+    {
+      "en": "How KOA collects, uses and protects the personal data submitted through the XHOCK ticket registration form.",
+      "es": "Cómo KOA recopila, usa y protege los datos personales enviados mediante el formulario de registro de boletos de XHOCK."
+    },
+    {
+      "en": "How refunds are requested and how long they take.",
+      "es": "Cómo se solicitan los reembolsos y cuánto tardan."
+    },
+    {
+      "en": "Ice hockey is a contact sport. By registering, players acknowledge the inherent risk of injury and agree to follow the rules of the tournament, the instructions of referees and staff, and the safety rules of Happi Arena Cancun.",
+      "es": "El hockey sobre hielo es un deporte de contacto. Al registrarse, los jugadores reconocen el riesgo inherente de lesiones y aceptan seguir las reglas del torneo, las indicaciones de árbitros y personal, y las reglas de seguridad de Happi Arena Cancún."
+    },
+    {
+      "en": "Intellectual property",
+      "es": "Propiedad intelectual"
+    },
+    {
+      "en": "KOA may change the schedule, venue, format or activities for operational, safety or force majeure reasons. Material changes will be communicated to the email address used at purchase.",
+      "es": "KOA puede cambiar el calendario, la sede, el formato o las actividades por razones operativas, de seguridad o de fuerza mayor. Los cambios importantes se comunicarán al correo usado en la compra."
+    },
+    {
+      "en": "KOA on WhatsApp",
+      "es": "KOA por WhatsApp"
+    },
+    {
+      "en": "Legal bases",
+      "es": "Bases legales"
+    },
+    {
+      "en": "Legal entity, registered address and tax identification:",
+      "es": "Entidad legal, domicilio registrado e identificación fiscal:"
+    },
+    {
+      "en": "Liability",
+      "es": "Responsabilidad"
+    },
+    {
+      "en": "Meta",
+      "es": "Meta"
+    },
+    {
+      "en": "Minors",
+      "es": "Menores de edad"
+    },
+    {
+      "en": "Participation in the XHOCK tournament (round robin format).",
+      "es": "Participación en el torneo XHOCK (formato round robin)."
+    },
+    {
+      "en": "Payment data:",
+      "es": "Datos de pago:"
+    },
+    {
+      "en": "Photography and media",
+      "es": "Fotografía y medios"
+    },
+    {
+      "en": "Player Ticket",
+      "es": "boleto de jugador"
+    },
+    {
+      "en": "Player data:",
+      "es": "Datos del jugador:"
+    },
+    {
+      "en": "Players are responsible for bringing their own equipment and for ensuring it is in safe condition. KOA may remove any participant who behaves dangerously, discriminates against others, or breaches venue rules, without refund where the applicable policy allows it.",
+      "es": "Los jugadores son responsables de llevar su propio equipo y de que esté en condiciones seguras. KOA puede retirar a cualquier participante que se comporte de forma peligrosa, discrimine a otros o incumpla las reglas de la sede, sin reembolso cuando la política aplicable lo permita."
+    },
+    {
+      "en": "Players under {n1} may only participate with the authorisation of a parent or legal guardian, who must complete the registration on their behalf. The minimum registered age is {n2} and the maximum is {n3}; exceptions require written approval from KOA.",
+      "es": "Los jugadores menores de {n1} años solo pueden participar con la autorización de un padre, madre o tutor legal, quien debe completar el registro en su nombre. La edad mínima de registro es {n2} y la máxima es {n3}; las excepciones requieren aprobación por escrito de KOA."
+    },
+    {
+      "en": "Players under {n1} must be registered by a parent or legal guardian, who confirms that they have the authority to provide the player's data and to accept the Terms & Conditions on the player's behalf. If you believe a minor's data was submitted without authorisation, contact us so we can delete it.",
+      "es": "Los jugadores menores de {n1} años deben ser registrados por un padre, madre o tutor legal, quien confirma que tiene la facultad de proporcionar los datos del jugador y de aceptar los Términos y Condiciones en su nombre. Si crees que los datos de un menor se enviaron sin autorización, contáctanos para eliminarlos."
+    },
+    {
+      "en": "Postal address and formal notice address:",
+      "es": "Domicilio postal y domicilio para notificaciones formales:"
+    },
+    {
+      "en": "Price, payment and taxes",
+      "es": "Precio, pago e impuestos"
+    },
+    {
+      "en": "Prices are shown in US dollars (USD). Payment is processed by",
+      "es": "Los precios se muestran en dólares estadounidenses (USD). El pago lo procesa"
+    },
+    {
+      "en": "Privacy Policy — XHOCK by KOA",
+      "es": "Aviso de Privacidad — XHOCK by KOA"
+    },
+    {
+      "en": "Privacy contact:",
+      "es": "Contacto de privacidad:"
+    },
+    {
+      "en": "Questions about these terms, a purchase or a refund request:",
+      "es": "Preguntas sobre estos términos, una compra o una solicitud de reembolso:"
+    },
+    {
+      "en": "Registration and eligibility",
+      "es": "Registro y elegibilidad"
+    },
+    {
+      "en": "Registration draft",
+      "es": "Borrador del registro"
+    },
+    {
+      "en": "Retention:",
+      "es": "Conservación:"
+    },
+    {
+      "en": "Security",
+      "es": "Seguridad"
+    },
+    {
+      "en": "Skip to content",
+      "es": "Saltar al contenido"
+    },
+    {
+      "en": "Stripe",
+      "es": "Stripe"
+    },
+    {
+      "en": "Subject to applicable law, you can request access to your data, its rectification or deletion, object to certain processing, withdraw consent for analytics, and ask for a copy of the data you provided.",
+      "es": "Conforme a la ley aplicable, puedes solicitar el acceso a tus datos, su rectificación o eliminación, oponerte a ciertos tratamientos, retirar tu consentimiento para analítica y pedir una copia de los datos que proporcionaste."
+    },
+    {
+      "en": "Team assignment, roster size, positions and schedule are decided by KOA. Registering with friends does not guarantee being placed on the same team.",
+      "es": "La asignación de equipos, el tamaño de la plantilla, las posiciones y el calendario los decide KOA. Registrarte con amigos no garantiza quedar en el mismo equipo."
+    },
+    {
+      "en": "Technical and analytics data:",
+      "es": "Datos técnicos y de analítica:"
+    },
+    {
+      "en": "Terms & Conditions — XHOCK by KOA",
+      "es": "Términos y Condiciones — XHOCK by KOA"
+    },
+    {
+      "en": "Terms and conditions for XHOCK by KOA, the international hockey tournament at Happi Arena Cancun, {d1}.",
+      "es": "Términos y condiciones de XHOCK by KOA, el torneo internacional de hockey en Happi Arena Cancún, {d1}."
+    },
+    {
+      "en": "The XHOCK and KOA names, logos, photographs, videos and page content are owned by KOA or used with permission. They may not be reproduced for commercial purposes without written authorisation.",
+      "es": "Los nombres, logotipos, fotografías, videos y contenido de XHOCK y KOA son propiedad de KOA o se usan con permiso. No pueden reproducirse con fines comerciales sin autorización por escrito."
+    },
+    {
+      "en": "The commemorative jersey and the activities and additional experiences described on the tickets page.",
+      "es": "El jersey conmemorativo y las actividades y experiencias adicionales descritas en la página de boletos."
+    },
+    {
+      "en": "The data controller is KOA Sports (\"KOA\", \"we\"), organiser of XHOCK at Happi Arena Cancun. Legal entity, registered address and privacy contact:",
+      "es": "El responsable de los datos es KOA Sports (\"KOA\", \"nosotros\"), organizador de XHOCK en Happi Arena Cancún. Entidad legal, domicilio registrado y contacto de privacidad:"
+    },
+    {
+      "en": "The final amount, including any applicable taxes or processing fees, is the amount displayed on the Stripe checkout page before you confirm the payment. Currency conversion, if your card is issued in another currency, is handled by your bank.",
+      "es": "El monto final, incluidos los impuestos o comisiones de procesamiento aplicables, es el que se muestra en la página de pago de Stripe antes de confirmar el pago. La conversión de moneda, si tu tarjeta es de otra moneda, la realiza tu banco."
+    },
+    {
+      "en": "The form also contains a hidden anti-bot field. It is not intended to be filled in by people and is not used to identify you.",
+      "es": "El formulario también contiene un campo oculto antibots. No está pensado para que lo llenen personas y no se usa para identificarte."
+    },
+    {
+      "en": "The maximum number of tickets per order is",
+      "es": "El número máximo de boletos por pedido es"
+    },
+    {
+      "en": "The page stores two things in your browser:",
+      "es": "La página guarda dos cosas en tu navegador:"
+    },
+    {
+      "en": "The person completing the purchase must be at least {n1} years old and is responsible for the accuracy of the contact details and of every player's information (name, age, position and jersey size).",
+      "es": "La persona que realiza la compra debe tener al menos {n1} años y es responsable de la exactitud de los datos de contacto y de la información de cada jugador (nombre, edad, posición y talla de jersey)."
+    },
+    {
+      "en": "The product sold on this page is a",
+      "es": "El producto que se vende en esta página es un"
+    },
+    {
+      "en": "The site is served over HTTPS. Payment data is handled by Stripe. Access to registration data is restricted to KOA staff and providers who need it to operate the event. No system is completely secure, but we apply reasonable technical and organisational measures.",
+      "es": "El sitio se sirve por HTTPS. Los datos de pago los maneja Stripe. El acceso a los datos de registro está limitado al personal de KOA y a los proveedores que lo necesitan para operar el evento. Ningún sistema es totalmente seguro, pero aplicamos medidas técnicas y organizativas razonables."
+    },
+    {
+      "en": "This document describes how the ticket flow actually works, but it is not legal advice and it still needs to be reviewed and completed by KOA's legal counsel before it is published. Sections marked",
+      "es": "Este documento describe cómo funciona realmente el flujo de boletos, pero no constituye asesoría legal y aún debe ser revisado y completado por el asesor legal de KOA antes de publicarse. Las secciones marcadas"
+    },
+    {
+      "en": "This policy reflects what the website actually collects today, but it is not legal advice. KOA's counsel must confirm the controller details, retention periods, legal bases and international transfers before publication. Items marked",
+      "es": "Este aviso refleja lo que el sitio recopila actualmente, pero no constituye asesoría legal. El asesor legal de KOA debe confirmar los datos del responsable, los plazos de conservación, las bases legales y las transferencias internacionales antes de publicarlo. Los puntos marcados"
+    },
+    {
+      "en": "Tickets and what they include",
+      "es": "Boletos y qué incluyen"
+    },
+    {
+      "en": "To answer questions and manage cancellations, transfers or incidents.",
+      "es": "Para responder preguntas y gestionar cancelaciones, transferencias o incidentes."
+    },
+    {
+      "en": "To comply with legal, accounting and tax obligations.",
+      "es": "Para cumplir obligaciones legales, contables y fiscales."
+    },
+    {
+      "en": "To exercise these rights,",
+      "es": "Para ejercer estos derechos,"
+    },
+    {
+      "en": "To measure the performance of our advertising and improve the page.",
+      "es": "Para medir el rendimiento de nuestra publicidad y mejorar la página."
+    },
+    {
+      "en": "To process the payment and send the purchase confirmation and event instructions.",
+      "es": "Para procesar el pago y enviar la confirmación de compra y las instrucciones del evento."
+    },
+    {
+      "en": "To process your registration, assign players to teams and prepare the event.",
+      "es": "Para procesar tu registro, asignar jugadores a equipos y preparar el evento."
+    },
+    {
+      "en": "To the maximum extent permitted by applicable law, KOA is not liable for indirect or consequential losses, or for travel, accommodation or other costs incurred by participants beyond the price of the ticket. Nothing in these terms excludes liability that cannot legally be excluded.",
+      "es": "En la máxima medida que permita la ley aplicable, KOA no es responsable de pérdidas indirectas o consecuentes, ni de gastos de viaje, hospedaje u otros costos de los participantes más allá del precio del boleto. Nada de estos términos excluye la responsabilidad que legalmente no pueda excluirse."
+    },
+    {
+      "en": "Travel and medical insurance are the responsibility of each participant.",
+      "es": "El seguro de viaje y médico es responsabilidad de cada participante."
+    },
+    {
+      "en": "UTM parameters, advertising click identifiers (for example gclid or fbclid), the landing page and the external referrer, stored to attribute the registration to the campaign that generated it.",
+      "es": "Parámetros UTM, identificadores de clics publicitarios (por ejemplo gclid o fbclid), la página de aterrizaje y el referente externo, guardados para atribuir el registro a la campaña que lo generó."
+    },
+    {
+      "en": "Until that policy is published, any request must be made in writing through the contact channel in section {n1} and will be reviewed case by case by KOA.",
+      "es": "Mientras esa política no se publique, cualquier solicitud debe hacerse por escrito mediante el canal de contacto de la sección {n1} y KOA la revisará caso por caso."
+    },
+    {
+      "en": "Voluntary cancellation by the player and the applicable deadline.",
+      "es": "Cancelación voluntaria por parte del jugador y el plazo aplicable."
+    },
+    {
+      "en": "We do not sell your personal data. We do not use the phone number submitted in the form to send unsolicited marketing messages.",
+      "es": "No vendemos tus datos personales. No usamos el teléfono enviado en el formulario para mandar mensajes de marketing no solicitados."
+    },
+    {
+      "en": "We may update this policy when the event operation or the law changes. The date at the top shows the latest version. Material changes will be communicated on this page.",
+      "es": "Podemos actualizar este aviso cuando cambie la operación del evento o la ley. La fecha de arriba indica la última versión. Los cambios importantes se comunicarán en esta página."
+    },
+    {
+      "en": "What happens if KOA cancels or postpones the event.",
+      "es": "Qué pasa si KOA cancela o pospone el evento."
+    },
+    {
+      "en": "What happens if the schedule, venue or format changes.",
+      "es": "Qué pasa si cambian el calendario, la sede o el formato."
+    },
+    {
+      "en": "What we collect",
+      "es": "Qué recopilamos"
+    },
+    {
+      "en": "When you open the registration form and complete a purchase, we collect:",
+      "es": "Cuando abres el formulario de registro y completas una compra, recopilamos:"
+    },
+    {
+      "en": "Whether a ticket can be transferred to another player, and how.",
+      "es": "Si un boleto puede transferirse a otro jugador y cómo."
+    },
+    {
+      "en": "Who is responsible for your data",
+      "es": "Quién es responsable de tus datos"
+    },
+    {
+      "en": "Who we are",
+      "es": "Quiénes somos"
+    },
+    {
+      "en": "Who we share it with",
+      "es": "Con quién lo compartimos"
+    },
+    {
+      "en": "Why we use it",
+      "es": "Para qué lo usamos"
+    },
+    {
+      "en": "XHOCK by KOA · Happi Arena Cancun · {d1} · Last updated: {d2}",
+      "es": "XHOCK by KOA · Happi Arena Cancún · {d1} · Última actualización: {d2}"
+    },
+    {
+      "en": "XHOCK by KOA · Last updated: {d1}",
+      "es": "XHOCK by KOA · Última actualización: {d1}"
+    },
+    {
+      "en": "XHOCK is organised by KOA Sports (\"KOA\", \"we\", \"us\"), a private, independent organisation focused on sports experiences and athlete development. XHOCK is not affiliated with, endorsed by, or represented by any national or international hockey federation.",
+      "es": "XHOCK es organizado por KOA Sports (\"KOA\", \"nosotros\"), una organización privada e independiente enfocada en experiencias deportivas y desarrollo de atletas. XHOCK no está afiliado, respaldado ni representado por ninguna federación de hockey nacional o internacional."
+    },
+    {
+      "en": "XHOCK tickets",
+      "es": "Boletos XHOCK"
+    },
+    {
+      "en": "Your order is confirmed when Stripe reports a successful payment. The confirmation email is sent to the address you entered in the form.",
+      "es": "Tu pedido se confirma cuando Stripe informa un pago exitoso. El correo de confirmación se envía a la dirección que ingresaste en el formulario."
+    },
+    {
+      "en": "Your rights",
+      "es": "Tus derechos"
+    },
+    {
+      "en": "[KOA to confirm the exact period.]",
+      "es": "[KOA por confirmar el plazo exacto.]"
+    },
+    {
+      "en": "[KOA to confirm the exact providers.]",
+      "es": "[KOA por confirmar los proveedores exactos.]"
+    },
+    {
+      "en": "[KOA to confirm the formal privacy inbox and the response deadline.]",
+      "es": "[KOA por confirmar el buzón formal de privacidad y el plazo de respuesta.]"
+    },
+    {
+      "en": "[KOA to confirm: whether medical coverage or a waiver is required.]",
+      "es": "[KOA por confirmar: si se requiere cobertura médica o una carta de exoneración.]"
+    },
+    {
+      "en": "[KOA to confirm]",
+      "es": "[KOA por confirmar]"
+    },
+    {
+      "en": "and state clearly which right you want to exercise.",
+      "es": "e indica claramente qué derecho quieres ejercer."
+    },
+    {
+      "en": "first name, last name, email address, phone number and country.",
+      "es": "nombre, apellido, correo electrónico, teléfono y país."
+    },
+    {
+      "en": "for each ticket, the player's name, age, position and jersey size.",
+      "es": "por cada boleto, el nombre, la edad, la posición y la talla de jersey del jugador."
+    },
+    {
+      "en": "for up to {n1} days, so a registration can be attributed to the ad that brought you even if you come back later.",
+      "es": "hasta por {n1} días, para poder atribuir un registro al anuncio que te trajo aunque regreses más tarde."
+    },
+    {
+      "en": "if you interact with the page, Google Tag Manager (including Google Analytics) and the Meta Pixel may set cookies and collect device, browser and interaction data.",
+      "es": "si interactúas con la página, Google Tag Manager (incluido Google Analytics) y Meta Pixel pueden colocar cookies y recopilar datos del dispositivo, el navegador y la interacción."
+    },
+    {
+      "en": "in",
+      "es": "en"
+    },
+    {
+      "en": "in the footer. You can also block or delete cookies in your browser settings.",
+      "es": "en el pie de página. También puedes bloquear o eliminar cookies en la configuración de tu navegador."
+    },
+    {
+      "en": "include travel, lodging, meals, transfers, insurance, equipment or companion access, unless a specific inclusion is stated in writing at the time of purchase. Companion access and hotel rates are subject to the conditions confirmed by KOA.",
+      "es": "incluye viaje, hospedaje, comidas, traslados, seguros, equipo ni acceso para acompañantes, salvo que se indique por escrito una inclusión específica al momento de la compra. El acceso de acompañantes y las tarifas de hotel están sujetos a las condiciones que confirme KOA."
+    },
+    {
+      "en": "koa_analytics_consent",
+      "es": "koa_analytics_consent"
+    },
+    {
+      "en": "localStorage",
+      "es": "localStorage"
+    },
+    {
+      "en": "message KOA on WhatsApp",
+      "es": "escribe a KOA por WhatsApp"
+    },
+    {
+      "en": "must be decided by KOA.",
+      "es": "los debe decidir KOA."
+    },
+    {
+      "en": "not",
+      "es": "no"
+    },
+    {
+      "en": "on Stripe-hosted checkout pages. KOA does not receive or store full card numbers.",
+      "es": "en las páginas de pago alojadas por Stripe. KOA no recibe ni almacena números completos de tarjeta."
+    },
+    {
+      "en": "per player. A Player Ticket includes:",
+      "es": "por jugador. Un boleto de jugador incluye:"
+    },
+    {
+      "en": "priced at",
+      "es": "con precio de"
+    },
+    {
+      "en": "processed directly by Stripe. KOA receives the result of the payment and limited billing details, but never your full card number.",
+      "es": "procesados directamente por Stripe. KOA recibe el resultado del pago y datos de facturación limitados, pero nunca tu número completo de tarjeta."
+    },
+    {
+      "en": "registration and payment records are kept for the period required to operate the event and to comply with accounting and tax obligations.",
+      "es": "los registros de inscripción y pago se conservan durante el periodo necesario para operar el evento y cumplir obligaciones contables y fiscales."
+    },
+    {
+      "en": "require a decision.",
+      "es": "requieren una decisión."
+    },
+    {
+      "en": "sessionStorage",
+      "es": "sessionStorage"
+    },
+    {
+      "en": "used by KOA to operate the site and send confirmations.",
+      "es": "usados por KOA para operar el sitio y enviar confirmaciones."
+    },
+    {
+      "en": "{n1} USD",
+      "es": "{n1} USD"
+    },
+    {
+      "en": "{n1}. Changes and contact",
+      "es": "{n1}. Cambios y contacto"
+    },
+    {
+      "en": "{n1}. Changes, cancellation and refunds",
+      "es": "{n1}. Cambios, cancelaciones y reembolsos"
+    },
+    {
+      "en": "{n1}. Conduct, safety and risk",
+      "es": "{n1}. Conducta, seguridad y riesgo"
+    },
+    {
+      "en": "{n1}. Contact",
+      "es": "{n1}. Contacto"
+    },
+    {
+      "en": "{n1}. Cookies, local storage and retention",
+      "es": "{n1}. Cookies, almacenamiento local y conservación"
+    },
+    {
+      "en": "{n1}. Governing law",
+      "es": "{n1}. Ley aplicable"
+    },
+    {
+      "en": "{n1}. Intellectual property",
+      "es": "{n1}. Propiedad intelectual"
+    },
+    {
+      "en": "{n1}. Legal bases",
+      "es": "{n1}. Bases legales"
+    },
+    {
+      "en": "{n1}. Liability",
+      "es": "{n1}. Responsabilidad"
+    },
+    {
+      "en": "{n1}. Minors",
+      "es": "{n1}. Menores de edad"
+    },
+    {
+      "en": "{n1}. Photography and media",
+      "es": "{n1}. Fotografía y medios"
+    },
+    {
+      "en": "{n1}. Price, payment and taxes",
+      "es": "{n1}. Precio, pago e impuestos"
+    },
+    {
+      "en": "{n1}. Registration and eligibility",
+      "es": "{n1}. Registro y elegibilidad"
+    },
+    {
+      "en": "{n1}. Security",
+      "es": "{n1}. Seguridad"
+    },
+    {
+      "en": "{n1}. Tickets and what they include",
+      "es": "{n1}. Boletos y qué incluyen"
+    },
+    {
+      "en": "{n1}. What we collect",
+      "es": "{n1}. Qué recopilamos"
+    },
+    {
+      "en": "{n1}. Who is responsible for your data",
+      "es": "{n1}. Quién es responsable de tus datos"
+    },
+    {
+      "en": "{n1}. Who we are",
+      "es": "{n1}. Quiénes somos"
+    },
+    {
+      "en": "{n1}. Who we share it with",
+      "es": "{n1}. Con quién lo compartimos"
+    },
+    {
+      "en": "{n1}. Why we use it",
+      "es": "{n1}. Para qué lo usamos"
+    },
+    {
+      "en": "{n1}. Your rights",
+      "es": "{n1}. Tus derechos"
+    },
+    {
+      "en": "© KOA. All rights reserved. · Developed by Hetor ·",
+      "es": "© KOA. Todos los derechos reservados. · Desarrollado por Hetor ·"
+    },
+    {
+      "en": "— KOA intends to photograph and record the event for communication and promotional purposes. The final policy, including how participants (or the guardians of minors) can opt out, must be approved before publication.",
+      "es": "— KOA pretende fotografiar y grabar el evento con fines de comunicación y promoción. La política final, incluida la forma en que los participantes (o los tutores de menores) pueden negarse, debe aprobarse antes de publicarse."
+    },
+    {
+      "en": "— depending on the jurisdiction, processing relies on the performance of the contract (registration and payment), compliance with legal obligations, legitimate interest (security and basic analytics) and, where required, your consent for advertising cookies. The final wording must be validated for Mexico (LFPDPPP) and for visitors from the United States, Canada and the European Union.",
+      "es": "— según la jurisdicción, el tratamiento se basa en la ejecución del contrato (registro y pago), el cumplimiento de obligaciones legales, el interés legítimo (seguridad y analítica básica) y, cuando se requiera, tu consentimiento para cookies publicitarias. La redacción final debe validarse para México (LFPDPPP) y para visitantes de Estados Unidos, Canadá y la Unión Europea."
+    },
+    {
+      "en": "— the refund, transfer and cancellation policy must be defined and published here before ticket sales are promoted. It should cover at least:",
+      "es": "— la política de reembolsos, transferencias y cancelaciones debe definirse y publicarse aquí antes de promocionar la venta de boletos. Debe cubrir al menos:"
+    },
+    {
+      "en": "— these terms are intended to be governed by the laws of the United Mexican States and the courts of Quintana Roo, Mexico, without prejudice to mandatory consumer protections in the buyer's country of residence.",
+      "es": "— se pretende que estos términos se rijan por las leyes de los Estados Unidos Mexicanos y los tribunales de Quintana Roo, México, sin perjuicio de las protecciones obligatorias al consumidor del país de residencia del comprador."
     }
   ]
 }
