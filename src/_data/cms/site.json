@@ -13,7 +13,7 @@
   "metaPixelId": "1026403033730229",
   "checkoutEndpoint": "api/checkout",
   "developerName": "Hetor",
-  "developerUrl": "",
+  "developerUrl": "https://hetor.hehurove.workers.dev/es",
   "analyticsConsent": "banner",
   "turnstileSiteKey": ""
 }
